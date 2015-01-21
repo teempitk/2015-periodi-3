@@ -1,4 +1,4 @@
-
+package Huffman;
 /**
  * Luokka Symbol vastaa yksinkertaisesti yhtä kirjainmerkkiä (char). Luokka
  * sisältää tiedon merkin tyypistä, sen esiintymiskertojen määrästä ja välineet
@@ -15,7 +15,7 @@ public class Symbol implements Comparable<Symbol> {
     /**
      * Merkin esiintymiskertojen määrä pakattavassa tekstissä.
      */
-    private int freq;
+    private final int freq;
 
     /**
      * Konstruktori alustaa merkin tyypin ja määrän parametrien mukaisesti

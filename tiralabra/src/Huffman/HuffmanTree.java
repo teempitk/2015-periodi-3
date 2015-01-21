@@ -1,3 +1,4 @@
+package Huffman;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -5,7 +6,8 @@ import java.util.List;
 
 /**
  * HuffmanTree-luokan tarkoitus on tarjota merkkikohtaiset koodisanat luova
- * huffmanCodewords -metodi.
+ * huffmanCodewords -metodi. Koodisanojen luonti tapahtuu luomalla yksityisissä
+ * metodeissa Huffman-puu tietorakenne.
  *
  * @author teemupitkanen1
  */
@@ -38,6 +40,7 @@ public class HuffmanTree {
      * 8-bit ASCII-numerointia.
      */
     public static String[] huffmanCodewords(int[] frequencyTable) {
+        root = null;
         codewords = new String[256];
         generateTree(frequencyTable);
         findCodewords(root, "");
@@ -54,22 +57,28 @@ public class HuffmanTree {
     private static void generateTree(int[] frequencyTable) {
         List<HuffmanNode> nodes = new ArrayList<>();
         for (int i = 0; i < 256; i++) {
-            HuffmanNode newnode = new HuffmanNode((char) i, frequencyTable[i], null, null);
-            nodes.add(newnode);
+            if (frequencyTable[i] > 0) {
+                HuffmanNode newnode = new HuffmanNode((char) i, frequencyTable[i]);
+                nodes.add(newnode);
+            } else {
+                codewords[frequencyTable[i]] = null;
+            }
         }
         Collections.sort(nodes);
         while (nodes.get(0).getFrequency() == 0) {
             nodes.remove(0);
         }
+        root = nodes.get(0); // Tarvitaan vain jos alkup. tekstissä vain yhtä merkkiä
         while (nodes.size() > 1) {
             Collections.sort(nodes);
             HuffmanNode left = nodes.get(0);
             HuffmanNode right = nodes.get(1);
             nodes.remove(0);
             nodes.remove(0);
-            root = new HuffmanNode(' ', left.getFrequency() + right.getFrequency(), left, right);
+            root = new HuffmanNode(left, right);
             nodes.add(root);
         }
+
     }
 
     /**
@@ -85,11 +94,17 @@ public class HuffmanTree {
      * @param prefix Rekursiossa kertynyt koodisana. Alussa "" (tyhjä).
      */
     private static void findCodewords(HuffmanNode node, String prefix) {
+
         if (node.getLeft() != null) {
             findCodewords(node.getLeft(), prefix + "0");
             findCodewords(node.getRight(), prefix + "1");
         } else {
-            codewords[node.getSymbol()] = prefix;
+            if (prefix.equals("")) {
+                codewords[node.getSymbol()] = "0"; // Jos tekstissä vain yhtä merkkiä, root on lehti
+            } else {
+                codewords[node.getSymbol()] = prefix;
+            }
         }
     }
+
 }

@@ -1,3 +1,4 @@
+package Huffman;
 
 /**
  * HuffmanNode on Huffman-puun sisäsolmu tai lehti. HuffmanNode on 'Symbol'in
@@ -19,18 +20,26 @@ public class HuffmanNode extends Symbol {
     private final HuffmanNode rightChild;
 
     /**
-     * Konstruktori luo uuden solmun, ja yksinkertaisesti asettaa solmun
-     * attribuuteille parametreina annetut arvot.
-     *
-     * @param s Solmua vastaava symboli (merkitystä vain lehtisolmuille)
+     * Konstruktori, jota käytetään Huffman-puun lehtisolmujen luontiin. Kutakin
+     * lehteä vastaa symboli, jonka merkki (char) ja lukumäärä tekstissä
+     * annetaan konstruktorille parametrina.
+     * @param s Solmua vastaava symboli
      * @param freq Solmua vastaava symbolin esiintymismäärä tekstissä.
-     * Lehtisolmuille solmun symbolin frekvenssi, sisäsolmuille vastaavan
-     * alipuun lehtien symbolien yhteenlaskettu frekvenssi.
-     * @param left solmun vasen lapsi.
-     * @param right solmun oikea lapsi.
      */
-    public HuffmanNode(char s, int freq, HuffmanNode left, HuffmanNode right) {
+    public HuffmanNode(char s, int freq) {
         super(s, freq);
+        this.leftChild = null;
+        this.rightChild = null;
+    }
+    /**
+     * Tätä konstrtuktoria käytetään puun sisäsolmujen luontiin. Sisäsolmuilla
+     * solmun symbolilla ei ole merkitystä, mutta esiintymiskertojen määräksi 
+     * asetetaan yhteenlaskettu lasten esiintymiskertojen määrä.
+     * @param left Solmun vasen lapsi
+     * @param right Solmun oikea lapsi
+     */
+    public HuffmanNode(HuffmanNode left, HuffmanNode right){
+        super(' ', left.getFrequency()+right.getFrequency());
         this.leftChild = left;
         this.rightChild = right;
     }

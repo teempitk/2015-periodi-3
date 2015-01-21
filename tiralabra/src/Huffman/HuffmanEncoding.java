@@ -1,25 +1,32 @@
 
+package Huffman;
+
 import java.io.File;
 import java.util.Scanner;
 
-public class Main {
-
-    private static int[] freqs;
+/**
+ *
+ * @author teemupitkanen1
+ */
+public class HuffmanEncoding {
+    
     private static int nonascii;
-
-    public static void main(String[] args) {
+    private static int[] freqs;
+    
+    public static void encode(String inFile, String outFile){
+        
         nonascii = 0;
         freqs = new int[256];
         for (int i = 0; i < 256; i++) {
             freqs[i] = 0;
         }
-        if(!args[0].substring(args[0].length()-4).equals(".txt")){
+        if(!inFile.substring(inFile.length()-4).equals(".txt")){
             System.out.println("At the moment, only .txt -files can be compressed");
             System.exit(0);
         }
         Scanner scan = null;
         try {
-            scan = new Scanner(new File(args[0]));
+            scan = new Scanner(new File(inFile));
         } catch (Exception e) {
             System.out.println("No such file");
             System.exit(0);
