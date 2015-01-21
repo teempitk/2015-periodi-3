@@ -1,6 +1,8 @@
 package Huffman;
 
+import IO.BitWriter;
 import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -28,12 +30,23 @@ public class HuffmanEncoding {
     private static Scanner scan;
 
     /**
+     * codes tallettaa kunkin merkin bittikoodauksen merkkijonona, esim "01010".
+     * Bittikoodaukset ovat taulukossa ASCII-merkkien numeroinnin mukaisesti.
+     */
+    private static String[] codes;
+    
+    /**
+     * Bitwriter-olio hoitaa bittitason tiedostoon kirjoittamisen.
+     */
+    private static BitWriter bwriter;
+    
+    /**
      * Luokan ydinmetodi, jota kutsumalla tiedoston pakkaus tapahtuu.
      *
      * @param inFile Pakattava tiedosto
      * @param outFile Pakatun tiedoston nimi
      */
-    public static void encode(String inFile, String outFile) {
+    public static void encode(String inFile, String outFile) throws IOException {
         nonascii = 0;
         freqs = new int[256];
         checkFileType(inFile);
@@ -49,10 +62,30 @@ public class HuffmanEncoding {
             System.out.println("Text contains " + nonascii + " characters not"
                     + " included in 8-bit ASCII. Those are lost in the compression.");
         }
-        String[] codes = HuffmanTree.huffmanCodewords(freqs);
-        for (int i = 0; i < 256; i++) {
-            System.out.println(i + ":" + codes[i]);
+        codes = HuffmanTree.huffmanCodewords(freqs);
+        bwriter = new BitWriter(new File(outFile));
+        writeToFileAsBits(inFile, outFile);
+
+    }
+
+    /**
+     * Kun merkittäiset koodisanat on selvitetty, tämä metodi huolehtii koko
+     * tekstin koodauksesta ja tallentamisesta tiedostoon.
+     *
+     * @param outFile Kohdetiedosto
+     * @throws IOException
+     */
+    private static void writeToFileAsBits(String inFile, String outFile) throws IOException {
+        scan = new Scanner(new File(inFile));
+        while (scan.hasNext()) {
+            String line = scan.nextLine();
+            for (int i = 0; i < line.length(); i++) {
+                if (line.charAt(i) < 256) {
+                    bwriter.writeBits(codes[line.charAt(i)]);
+                }
+            }
         }
+        bwriter.writeTheLastBits("");
     }
 
     /**
@@ -79,6 +112,7 @@ public class HuffmanEncoding {
 
     /**
      * Laskee kunkin merkin esiintymismäärät yhdellä rivillä.
+     *
      * @param line Rivi, joka lasketaan.
      */
     private static void countSymbolsInOneLine(String line) {
@@ -88,7 +122,6 @@ public class HuffmanEncoding {
                 freqs[index]++;
             } else {
                 nonascii++;
-                System.out.println(line);
             }
         }
         freqs[10]++; // Rivi päättyy aina rivinvaihtoon.
