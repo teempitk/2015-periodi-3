@@ -10,6 +10,6 @@ public class Main {
                     + "> java Main d NameOfCompressedFile NameOfDecompressedFile");
             System.exit(0);
         }
-        HuffmanEncoding.encode(args[0],"");
+        HuffmanEncoding.encode(args[1],"");
     }
 }
