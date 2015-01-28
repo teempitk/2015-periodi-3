@@ -1,6 +1,7 @@
 
 package IO;
 
+import Utils.StringBitConversions;
 import java.io.File;
 import java.io.IOException;
 
@@ -19,5 +20,6 @@ public class BitWriterTester {
         writer.writeBits("010000");writer.writeBits("1101000100");//C&D
         writer.writeBits("0100001");//B - LAST BIT (nollabitti täydentyy seuraavalla rivillä)
         writer.writeTheLastBits("");
+        
     }
 }

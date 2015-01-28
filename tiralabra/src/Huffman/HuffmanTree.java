@@ -41,7 +41,7 @@ public class HuffmanTree {
      */
     public static String[] huffmanCodewords(int[] frequencyTable) {
         root = null;
-        codewords = new String[256];
+        codewords = new String[frequencyTable.length];
         generateTree(frequencyTable);
         findCodewords(root, "");
         return codewords;
@@ -56,7 +56,7 @@ public class HuffmanTree {
      */
     private static void generateTree(int[] frequencyTable) {
         List<HuffmanNode> nodes = new ArrayList<>();
-        for (int i = 0; i < 256; i++) {
+        for (int i = 0; i < frequencyTable.length; i++) {
             if (frequencyTable[i] > 0) {
                 HuffmanNode newnode = new HuffmanNode((char) i, frequencyTable[i]);
                 nodes.add(newnode);
@@ -100,7 +100,7 @@ public class HuffmanTree {
             findCodewords(node.getRight(), prefix + "1");
         } else {
             if (prefix.equals("")) {
-                codewords[node.getSymbol()] = "0"; // Jos tekstissä vain yhtä merkkiä, root on lehti
+                codewords[node.getSymbol()] = "0"; // Jos tekstissä vain yhtä samaa tavua, root on lehti
             } else {
                 codewords[node.getSymbol()] = prefix;
             }

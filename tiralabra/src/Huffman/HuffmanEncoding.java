@@ -1,8 +1,9 @@
 package Huffman;
 
 import IO.BitWriter;
-import IO.ByteReader;
+import Utils.StringBitConversions;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
@@ -24,7 +25,7 @@ public class HuffmanEncoding {
      * Bittikoodaukset ovat taulukossa ASCII-merkkien numeroinnin mukaisesti.
      */
     private static String[] codes;
-    
+
     /**
      * Bitwriter-olio hoitaa bittitason tiedostoon kirjoittamisen.
      */
@@ -32,17 +33,20 @@ public class HuffmanEncoding {
     /**
      * Pakattavan tiedoston lukemiseen käytettävä ByteReader
      */
-    private static ByteReader breader;
+    private static FileInputStream breader;
+
     /**
      * Luokan ydinmetodi, jota kutsumalla tiedoston pakkaus tapahtuu.
      *
      * @param inFile Pakattava tiedosto
      * @param outFile Pakatun tiedoston nimi
+     * @throws java.io.IOException
      */
     public static void encode(String inFile, String outFile) throws IOException {
-        freqs = new int[256];
+        freqs = new int[257];
+        freqs[freqs.length - 1] = 1;
         try {
-            breader = new ByteReader(new File(inFile));
+            breader = new FileInputStream(new File(inFile));
         } catch (Exception e) {
             System.out.println("No such file");
             System.exit(0);
@@ -51,6 +55,7 @@ public class HuffmanEncoding {
         breader.close();
         codes = HuffmanTree.huffmanCodewords(freqs);
         bwriter = new BitWriter(new File(outFile));
+        writeEncodingToTheStartOfFile();
         writeToFileAsBits(inFile, outFile);
 
     }
@@ -63,52 +68,39 @@ public class HuffmanEncoding {
      * @throws IOException
      */
     private static void writeToFileAsBits(String inFile, String outFile) throws IOException {
-        breader = new ByteReader(new File(inFile));
-        while (breader.hasNext()){
-            bwriter.writeBits(codes[breader.readByte()]);
+        breader = new FileInputStream(new File(inFile));
+        while (breader.available() > 0) {
+            bwriter.writeBits(codes[breader.read()]);
         }
-        bwriter.writeTheLastBits("");
+        bwriter.writeTheLastBits(codes[codes.length - 1]+"00000000");
         breader.close();
     }
-
-    /**
-     * EI ENÄÄ KÄYTÖSSÄ!!!EI ENÄÄ KÄYTÖSSÄ!!!EI ENÄÄ KÄYTÖSSÄ!!!EI ENÄÄ KÄYTÖSSÄ!!!
-     * Metodi tarkistaa, onko pakattava tiedosto tekstitiedosto, ja keskeyttää
-     * ohjelman suorituksen jos ei.
-     *
-     * @param inFile Pakattavan tiedoston nimi
-     */
-//    private static void checkFileType(String inFile) {
-//        if (!inFile.substring(inFile.length() - 4).equals(".txt")) {
-//            System.out.println("At the moment, only .txt -files can be compressed");
-//            System.exit(0);
-//        }
-//    }
 
     /**
      * Laskee kunkin erilaisen tavun esiintymismäärät pakattavassa tiedostossa.
      */
     private static void countSymbols() throws IOException {
-        while(breader.hasNext()){
-            freqs[breader.readByte()]++;
+        while (breader.available() > 0) {
+            freqs[breader.read()]++;
         }
     }
 
     /**
-     * EI ENÄÄ KÄYTÖSSÄ!!!EI ENÄÄ KÄYTÖSSÄ!!!EI ENÄÄ KÄYTÖSSÄ!!!EI ENÄÄ KÄYTÖSSÄ!!!
-     * Laskee kunkin merkin esiintymismäärät yhdellä rivillä.
-     *
-     * @param line Rivi, joka lasketaan.
+     * Metodi kijoittaa tavuittaiset koodaukset pakatun tiedoston alkuun.
+     * Pakatun tiedoston rakenne on seuraava: 1. Tavun "00000000" koodauksen
+     * pituus 8 bitissä 2. Tavun "00000000" koodaus 3. Tavun "00000001"
+     * koodauksen pituus ... ... ... 512. Tavun "11111111" koodaus 513.
+     * EOF-merkin koodauksen pituus 514. EOF-merkin koodaus 515. Varsinainen
+     * pakattu data. 516. EOF-merkki ja täyttö tasatavuihin. 517. Tyhjä tavu
      */
-//    private static void countSymbolsInOneLine(String line) {
-//        for (int i = 0; i < line.length(); i++) {
-//            char index = line.charAt(i);
-//            if (index < 256) {
-//                freqs[index]++;
-//            } else {
-//               // nonascii++;
-//            }
-//        }
-//        freqs[10]++; // Rivi päättyy aina rivinvaihtoon.
-//    }
+    private static void writeEncodingToTheStartOfFile() throws IOException {
+        for (int i = 0; i < codes.length - 1; i++) {
+            if (codes[i] != null) {
+                bwriter.writeBits(StringBitConversions.positiveIntegerAsOneByteBitstring(codes[i].length()));
+                bwriter.writeBits(codes[i]);
+            } else {
+                bwriter.writeBits("00000000");
+            }
+        }
+    }
 }

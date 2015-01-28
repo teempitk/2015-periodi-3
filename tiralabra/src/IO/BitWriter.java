@@ -1,5 +1,6 @@
 package IO;
 
+import Utils.StringBitConversions;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,11 +25,6 @@ public class BitWriter {
      * alle kahdeksan bittiä pidetään merkkijonona tallessa tässä muuttujassa.
      */
     private String notWrittenYet;
-    /**
-     * Kukin luvuista vastaa tavua, jossa vain (taulukon indeksi +1):s bitti on
-     * 1
-     */
-    private byte[] powersOfTwo = {1, 2, 4, 8, 16, 32, 64, -128};
     /**
      * Stream bytejen kirjoittamiseen tiedostoon
      */
@@ -63,13 +59,13 @@ public class BitWriter {
         int len = bitString.length();
         int alreadyWritten = 0;
         while (len-alreadyWritten >= 8) {
-            byte B = asByte(bitString.substring(alreadyWritten, alreadyWritten + 8));
+            byte B = StringBitConversions.asByte(bitString.substring(alreadyWritten, alreadyWritten + 8));
             alreadyWritten += 8;
             stream.write(B);
         }
         notWrittenYet = bitString.substring(alreadyWritten);
     }
-
+    
     /**
      * Huolehtii notWrittenYet-bittien lisäämisestä tiedoston loppuun.
      * @param EOFbits Bittijono, josta tiedoston loppu tunnistetaan. Loput bitit
@@ -85,21 +81,4 @@ public class BitWriter {
         writeBits(bitString);
         stream.close();
     }
-
-    /**
-     * Muuttaa 8-merkkisen String-esityksen tavusta yhdeksi byteksi.
-     *
-     * @param bits merkkijonoesitys tavvusta
-     * @return tavu, jossa bitit merkkijonon mukaisesti.
-     */
-    private byte asByte(String bits) {
-        byte B = 0;
-        for (int i = 0; i < 8; i++) {
-            if (bits.charAt(i) == '1') {
-                B = (byte) (B | powersOfTwo[7-i]);
-            }
-        }
-        return B;
-    }
-
 }
