@@ -34,22 +34,12 @@ public class BitReader {
      */
     public BitReader(File file) throws IOException {
         this.file = file;
-        bitBuffer="";
+        bitBuffer = "";
         try {
             stream = new FileInputStream(file);
         } catch (Exception e) {
             System.out.println("Can't read the file");
         }
-    }
-
-    /**
-     * Lukee tavun verran dataa tiedostosta. Paluumuoto on luku välillä 0...255
-     *
-     * @return luetun byten arvo + 128
-     * @throws IOException
-     */
-    public String readByte() throws IOException {
-        return "";
     }
 
     /**
@@ -59,7 +49,7 @@ public class BitReader {
      * @throws IOException
      */
     public boolean hasNext() throws IOException {
-        return stream.available() > 0;
+        return stream.available() > 0 || bitBuffer.length() > 0;
     }
 
     /**
@@ -102,7 +92,11 @@ public class BitReader {
     public String readBits(int numberOfBits) throws IOException {
         String bits = bitBuffer;
         while (bits.length() < numberOfBits) {
-            bits += StringBitConversions.positiveIntegerAsOneByteBitstring(stream.read());
+            int nextByte = stream.read();
+            if (nextByte < 0) {
+                nextByte += 256;
+            }
+            bits += StringBitConversions.integerAsByteString(nextByte);
         }
         bitBuffer = bits.substring(numberOfBits);
         return bits.substring(0, numberOfBits);

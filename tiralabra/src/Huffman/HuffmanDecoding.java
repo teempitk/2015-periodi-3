@@ -32,10 +32,6 @@ public class HuffmanDecoding {
      * Puretun tiedoston kirjoittava BitWriter
      */
     private static BitWriter bwriter;
-    /**
-     * Bittijono, joka merkkaa tiedoston loppua.
-     */
-//    private static String eofmarker;                                          ei käytössä
 
     /**
      * decode-metodi saa parametrina purettavan tiedoston, ja tiedoston johon
@@ -46,34 +42,50 @@ public class HuffmanDecoding {
      * @param outFile Tiedosto, johon puretaan
      */
     public static void decode(String inFile, String outFile) throws IOException {
-        codes = new HashMap();
         breader = new BitReader(new File(inFile));
         bwriter = new BitWriter(new File(outFile));
+        codes = new HashMap();
         readCodewordsFromFile();
         decompress();
         breader.close();
         bwriter.writeTheLastBits("");
     }
 
+    /**
+     * Käytetään ensimmäisenä purussa, lukee kaikki koodisanat tiedoston alusta
+     * ja tallentaa ne mappiin käyttöä varten.
+     *
+     * @throws IOException
+     */
     private static void readCodewordsFromFile() throws IOException {
         for (int i = 0; i < 257; i++) {
             String codeword = breader.readNextCodeword();
             if (codeword != null) {
-                codes.put(codeword, StringBitConversions.positiveIntegerAsOneByteBitstring(i));
-//                System.out.println(i + ": " + codeword);
-//            } else {
-//                System.out.println(i);
+                if (i == 257) {
+                    codes.put(codeword, "EOF");
+                } else {
+                    codes.put(codeword, StringBitConversions.integerAsByteString(i));
+                }
             }
         }
     }
 
+    /**
+     * Metodi purkaa varsinaisen datan, käyttämällä aiemmin purettuja
+     * koodisanoja.
+     *
+     * @throws IOException
+     */
     private static void decompress() throws IOException {
         String bits = "";
-        while(breader.hasNext()){
-            bits+=breader.readBits(1);
-            if(codes.containsKey(bits)){
+        while (breader.hasNext()) {
+            bits += breader.readBits(1);
+            if (codes.containsKey(bits)) {
+                if(codes.get(bits).equals("EOF")){
+                    break;
+                }
                 bwriter.writeBits(codes.get(bits));
-                bits="";
+                bits = "";
             }
         }
     }

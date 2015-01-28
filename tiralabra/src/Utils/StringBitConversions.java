@@ -45,7 +45,7 @@ public class StringBitConversions {
      * @param number Koodattava luku
      * @return luvun bittiesitys (8bit) merkkijonona
      */
-    public static String positiveIntegerAsOneByteBitstring(int number) {
+    public static String integerAsByteString(int number) {
         String bitstring = "";
         for (int i = 7; i>=0; i--){
             if (number >= powersOfTwo[i]){

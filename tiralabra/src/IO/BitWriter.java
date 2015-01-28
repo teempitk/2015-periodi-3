@@ -74,6 +74,7 @@ public class BitWriter {
      */
     public void writeTheLastBits(String EOFbits) throws IOException {
         String bitString = notWrittenYet + EOFbits;
+        notWrittenYet = "";
         int numberOfZeroBits = (8-(bitString.length()%8))%8;
         for (int i=0; i<numberOfZeroBits; i++){
             bitString +="0";
