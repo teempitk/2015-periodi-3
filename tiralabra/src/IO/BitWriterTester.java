@@ -1,7 +1,7 @@
 
 package IO;
 
-import Utils.StringBitConversions;
+import Utils.BitConversions;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -14,20 +14,10 @@ import java.util.Scanner;
 public class BitWriterTester {
     public static void main(String[] args) throws IOException{
         
-        Scanner scanorig = new Scanner(new File("sampleFiles/alice.txt"));
-        Scanner scannernew = new Scanner(new File("sampleFiles/purettuAlice.txt"));
-        while (scanorig.hasNext() && scannernew.hasNext()){
-            String line1=scanorig.nextLine();
-            String line2=scannernew.nextLine();
-            if(!line1.equals(line2)){
-                System.out.println(line1);
-                System.out.println(line2);
-            }
-        }
-        while(scanorig.hasNext()){
-            System.out.println(scanorig.nextLine());
-        }
-        
+        File file = new File("test.txt");
+        BitWriter writer = new BitWriter(file);
+        writer.writeBits("01");
+        writer.writeTheLastBits("");
         
 //        File file = new File("outputfiles/merkkitiedosto.txt");
 //        BitWriter writer = new BitWriter(file);

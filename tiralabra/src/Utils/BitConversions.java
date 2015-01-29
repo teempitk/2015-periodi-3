@@ -5,7 +5,7 @@ package Utils;
  * Luokka muutoksiin bittijonojen ja niiden merkkijonoesitysten välillä
  * @author teemupitkanen1
  */
-public class StringBitConversions {
+public class BitConversions {
     /**
      * Kukin taulukon alkio vastaa ykkösbittiä tavun vastaavassa indeksissä
      */
@@ -28,18 +28,7 @@ public class StringBitConversions {
         }
         return B;
     }
-    /**
-     * EI TOIMI VIELÄ! Muuntaa parametrina annetun tavun merkkijonoesityksekseen, esim "01010101"
-     * @param B muunnettava tavu
-     * @return merkkijonoesitys tavusta
-     */
-    public static String asString(byte B){
-        String bitstring = "";
-        if (B<0){
-            bitstring += "1";
-        }else bitstring+="0";
-        return bitstring;
-    }
+
     /**
      * Metodin avulla voidaan koodata positiivisia lukuja (<256) bittiesityksikseen.
      * @param number Koodattava luku

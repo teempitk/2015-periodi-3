@@ -1,6 +1,6 @@
 package IO;
 
-import Utils.StringBitConversions;
+import Utils.BitConversions;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,7 +9,10 @@ import java.io.IOException;
  * BitWriter-luokka huolehtii datan kirjoituksen bittitasolla tiedostoon.
  * BitWriterista luodaan ensin instanssi, jolle sitten kutsutaan writeBits-
  * metodia, joka kirjoittaa parametrina annetun '0' ja '1' -merkkejä sisältävän
- * datan yksittäisinä bitteinä tiedostoon.
+ * datan yksittäisinä bitteinä tiedostoon. BitWriter puskuroi kirjoitettavia
+ * bittejä, koska oikeasti kirjoitus tapahtuu aina tavu kerrallaan. Tosiasiassa
+ * kaikki halutut bitit eivät siis välttämättä ole tiedostossa, ennekuin
+ * writeTheLastBits-metodia kutsutaan.
  *
  * @author teemupitkanen1
  */
@@ -58,16 +61,17 @@ public class BitWriter {
         bitString = notWrittenYet + bitString;
         int len = bitString.length();
         int alreadyWritten = 0;
-        while (len-alreadyWritten >= 8) {
-            byte B = StringBitConversions.asByte(bitString.substring(alreadyWritten, alreadyWritten + 8));
+        while (len - alreadyWritten >= 8) {
+            byte B = BitConversions.asByte(bitString.substring(alreadyWritten, alreadyWritten + 8));
             alreadyWritten += 8;
             stream.write(B);
         }
         notWrittenYet = bitString.substring(alreadyWritten);
     }
-    
+
     /**
      * Huolehtii notWrittenYet-bittien lisäämisestä tiedoston loppuun.
+     *
      * @param EOFbits Bittijono, josta tiedoston loppu tunnistetaan. Loput bitit
      * tasabyteihin pääsemiseksi täytetään nollilla.
      * @throws java.io.IOException
@@ -75,9 +79,9 @@ public class BitWriter {
     public void writeTheLastBits(String EOFbits) throws IOException {
         String bitString = notWrittenYet + EOFbits;
         notWrittenYet = "";
-        int numberOfZeroBits = (8-(bitString.length()%8))%8;
-        for (int i=0; i<numberOfZeroBits; i++){
-            bitString +="0";
+        int numberOfZeroBits = (8 - (bitString.length() % 8)) % 8;
+        for (int i = 0; i < numberOfZeroBits; i++) {
+            bitString += "0";
         }
         writeBits(bitString);
         stream.close();

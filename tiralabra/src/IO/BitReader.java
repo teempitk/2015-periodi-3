@@ -1,6 +1,6 @@
 package IO;
 
-import Utils.StringBitConversions;
+import Utils.BitConversions;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class BitReader {
      * Koska tiedostoa luetaan tavuittain, mutta kutsuttaessa saatetaan haluta
      * vain osa biteistä, loppujen merkkijonoestitys puskuroidaan tänne.
      */
-    String bitBuffer;
+    private String bitBuffer;
 
     /**
      * Konstruktori asettaa BitReaderin lukemaan haluttua tiedostoa
@@ -70,7 +70,7 @@ public class BitReader {
      * @throws IOException
      */
     public String readNextCodeword() throws IOException {
-        int cwlength = StringBitConversions.asByte(readBits(8));
+        int cwlength = BitConversions.asByte(readBits(8));
         if (cwlength < 0) {
             cwlength += 256;
         }
@@ -91,14 +91,19 @@ public class BitReader {
      */
     public String readBits(int numberOfBits) throws IOException {
         String bits = bitBuffer;
-        while (bits.length() < numberOfBits) {
+        while (bits.length() < numberOfBits && stream.available() > 0) {
             int nextByte = stream.read();
             if (nextByte < 0) {
                 nextByte += 256;
             }
-            bits += StringBitConversions.integerAsByteString(nextByte);
+            bits += BitConversions.integerAsByteString(nextByte);
         }
-        bitBuffer = bits.substring(numberOfBits);
-        return bits.substring(0, numberOfBits);
+        if (bits.length() < numberOfBits) {
+            bitBuffer = "";
+            return bits;
+        } else {
+            bitBuffer = bits.substring(numberOfBits);
+            return bits.substring(0, numberOfBits);
+        }
     }
 }

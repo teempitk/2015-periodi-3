@@ -1,7 +1,7 @@
 package Huffman;
 
 import IO.BitWriter;
-import Utils.StringBitConversions;
+import Utils.BitConversions;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,13 +16,14 @@ import java.io.IOException;
 public class HuffmanEncoding {
 
     /**
-     * Taulukkoon kerätään tieto kunkin merkin esiintymiskerroista Huffman-
-     * koodausta varten
+     * Taulukkoon kerätään tieto kunkin erilaisen tavun esiintymiskerroista
+     * Huffman- koodausta varten
      */
     private static int[] freqs;
     /**
-     * codes tallettaa kunkin merkin bittikoodauksen merkkijonona, esim "01010".
-     * Bittikoodaukset ovat taulukossa ASCII-merkkien numeroinnin mukaisesti.
+     * codes tallettaa kunkin lähdetiedoston tavun bittikoodauksen merkkijonona,
+     * esim "01010". Bittikoodaukset ovat taulukossa järjestyksessä, ensin tavun
+     * "00000000" koodaus, viimeisenä tavun "11111111" koodaus.
      */
     private static String[] codes;
 
@@ -44,9 +45,9 @@ public class HuffmanEncoding {
      */
     public static void encode(String inFile, String outFile) throws IOException {
         freqs = new int[257];
-        freqs[256]=1;
+        freqs[256] = 1;
         breader = new FileInputStream(new File(inFile));
-        countSymbols();
+        countDifferentBytesInFile();
         breader.close();
         codes = HuffmanTree.huffmanCodewords(freqs);
         bwriter = new BitWriter(new File(outFile));
@@ -77,7 +78,7 @@ public class HuffmanEncoding {
     /**
      * Laskee kunkin erilaisen tavun esiintymismäärät pakattavassa tiedostossa.
      */
-    private static void countSymbols() throws IOException {
+    private static void countDifferentBytesInFile() throws IOException {
         while (breader.available() > 0) {
             freqs[breader.read()]++;
         }
@@ -94,7 +95,7 @@ public class HuffmanEncoding {
     private static void writeEncodingToTheStartOfFile() throws IOException {
         for (int i = 0; i < codes.length; i++) {
             if (codes[i] != null) {
-                bwriter.writeBits(StringBitConversions.integerAsByteString(codes[i].length()));
+                bwriter.writeBits(BitConversions.integerAsByteString(codes[i].length()));
                 bwriter.writeBits(codes[i]);
             } else {
                 bwriter.writeBits("00000000");

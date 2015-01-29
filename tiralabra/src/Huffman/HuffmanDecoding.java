@@ -2,7 +2,7 @@ package Huffman;
 
 import IO.BitReader;
 import IO.BitWriter;
-import Utils.StringBitConversions;
+import Utils.BitConversions;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -10,7 +10,10 @@ import java.util.Map;
 
 /**
  * HuffmanDecoder huolehtii pakattujen tiedostojen purkamisesta. Luokan ydin on
- * staattinen metodi decode.
+ * staattinen metodi decode. Pääpiirteissään purku tapahtuu siten, että
+ * decode-metodi kutsuu ensin readCodewordsFromFile-metodia, ja saa siten
+ * selville Huffman-koodauksen koodisanat. Tämän jälkeen kutsutaan
+ * decompress-metodia, joka suorittaa varsinaisen datan purkamisen.
  *
  * @author teemupitkanen1
  */
@@ -18,9 +21,9 @@ public class HuffmanDecoding {
 
     /**
      * HashMapiin luetaan tiedoston alusta koodisanat. Avaimena on aina
-     * tiedostosta luettu bittijono, joten voidaan nopeasti tarkistaa, vastaako
-     * lukemisessa "kertynyt" bittijono jotain koodisanaa. Jos vastaa, vastaava
-     * tavu löytyy myös nopeasti.
+     * tiedostosta luettu bittijono, joten hajautuksen avulla voidaan nopeasti
+     * tarkistaa, vastaako lukemisessa "kertynyt" bittijono jotain koodisanaa.
+     * Jos vastaa, vastaava tavu löytyy myös nopeasti.
      */
     private static Map<String, String> codes;
 
@@ -29,14 +32,14 @@ public class HuffmanDecoding {
      */
     private static BitReader breader;
     /**
-     * Puretun tiedoston kirjoittava BitWriter
+     * Puretun tiedoston kirjoittava BitWriter.
      */
     private static BitWriter bwriter;
 
     /**
      * decode-metodi saa parametrina purettavan tiedoston, ja tiedoston johon
-     * puretaan.Metodi lukee ensin tiedoston alusta koodisanat, ja suorittaa
-     * sitten purun niitä käyttäen.
+     * puretaan. Metodi lukee ensin tiedoston alusta koodisanat, ja suorittaa
+     * sitten varsinaisen datan purun niitä käyttäen.
      *
      * @param inFile Pakattu tiedosto, jota puretaan
      * @param outFile Tiedosto, johon puretaan
@@ -64,7 +67,7 @@ public class HuffmanDecoding {
                 if (i == 256) {
                     codes.put(codeword, "EOF");
                 } else {
-                    codes.put(codeword, StringBitConversions.integerAsByteString(i));
+                    codes.put(codeword, BitConversions.integerAsByteString(i));
                 }
             }
         }
@@ -81,7 +84,7 @@ public class HuffmanDecoding {
         while (breader.hasNext()) {
             bits += breader.readBits(1);
             if (codes.containsKey(bits)) {
-                if(codes.get(bits).equals("EOF")){
+                if (codes.get(bits).equals("EOF")) {
                     break;
                 }
                 bwriter.writeBits(codes.get(bits));
