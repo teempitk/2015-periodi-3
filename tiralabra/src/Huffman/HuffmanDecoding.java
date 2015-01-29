@@ -61,7 +61,7 @@ public class HuffmanDecoding {
         for (int i = 0; i < 257; i++) {
             String codeword = breader.readNextCodeword();
             if (codeword != null) {
-                if (i == 257) {
+                if (i == 256) {
                     codes.put(codeword, "EOF");
                 } else {
                     codes.put(codeword, StringBitConversions.integerAsByteString(i));
