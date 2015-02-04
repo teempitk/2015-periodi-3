@@ -1,5 +1,7 @@
-package Huffman;
+package Main;
 
+import Huffman.HuffmanDecoding;
+import Huffman.HuffmanEncoding;
 import java.io.IOException;
 
 public class Main {

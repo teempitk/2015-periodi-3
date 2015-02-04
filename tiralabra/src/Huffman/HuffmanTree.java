@@ -1,5 +1,6 @@
 package Huffman;
 
+import DataStructures.OrderedLinkedList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,30 +56,20 @@ public class HuffmanTree {
      * tekstissä.
      */
     private static void generateTree(int[] frequencyTable) {
-        List<HuffmanNode> nodes = new ArrayList<>();
+        OrderedLinkedList list = new OrderedLinkedList();
         for (int i = 0; i < frequencyTable.length; i++) {
             if (frequencyTable[i] > 0) {
                 HuffmanNode newnode = new HuffmanNode((char) i, frequencyTable[i]);
-                nodes.add(newnode);
+                list.insert(newnode);
             } else {
                 codewords[frequencyTable[i]] = null;
             }
         }
-        Collections.sort(nodes);
-        while (nodes.get(0).getFrequency() == 0) {
-            nodes.remove(0);
+        while (list.size() >= 2) {
+            root = new HuffmanNode(list.removeSmallest(), list.removeSmallest());
+            list.insert(root);
         }
-        root = nodes.get(0); // Tarvitaan vain jos alkup. tekstissä vain yhtä merkkiä
-        while (nodes.size() > 1) {
-            Collections.sort(nodes);
-            HuffmanNode left = nodes.get(0);
-            HuffmanNode right = nodes.get(1);
-            nodes.remove(0);
-            nodes.remove(0);
-            root = new HuffmanNode(left, right);
-            nodes.add(root);
-        }
-
+        root = list.removeSmallest();
     }
 
     /**
@@ -94,7 +85,6 @@ public class HuffmanTree {
      * @param prefix Rekursiossa kertynyt koodisana. Alussa "" (tyhjä).
      */
     private static void findCodewords(HuffmanNode node, String prefix) {
-
         if (node.getLeft() != null) {
             findCodewords(node.getLeft(), prefix + "0");
             findCodewords(node.getRight(), prefix + "1");

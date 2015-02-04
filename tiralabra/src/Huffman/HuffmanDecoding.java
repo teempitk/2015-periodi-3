@@ -1,12 +1,11 @@
 package Huffman;
 
+import DataStructures.CodewordDictionary;
 import IO.BitReader;
 import IO.BitWriter;
 import Utils.BitConversions;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * HuffmanDecoder huolehtii pakattujen tiedostojen purkamisesta. Luokan ydin on
@@ -20,12 +19,13 @@ import java.util.Map;
 public class HuffmanDecoding {
 
     /**
-     * HashMapiin luetaan tiedoston alusta koodisanat. Avaimena on aina
-     * tiedostosta luettu bittijono, joten hajautuksen avulla voidaan nopeasti
-     * tarkistaa, vastaako lukemisessa "kertynyt" bittijono jotain koodisanaa.
-     * Jos vastaa, vastaava tavu löytyy myös nopeasti.
+     * CodewordDictionaryyn luetaan tiedoston alusta purkuun käytettävät
+     * koodisanat. Avaimena on aina tiedostosta luettu bittijono, joten
+     * hajautuksen avulla voidaan nopeasti tarkistaa, vastaako lukemisessa
+     * "kertynyt" bittijono jotain koodisanaa. Jos vastaa, vastaava tavu löytyy
+     * myös nopeasti.
      */
-    private static Map<String, String> codes;
+    private static CodewordDictionary codes;
 
     /**
      * Tiedoston bitittäiseen lukuun käytettävä BitReader.
@@ -47,7 +47,7 @@ public class HuffmanDecoding {
     public static void decode(String inFile, String outFile) throws IOException {
         breader = new BitReader(new File(inFile));
         bwriter = new BitWriter(new File(outFile));
-        codes = new HashMap();
+        codes = new CodewordDictionary();
         readCodewordsFromFile();
         decompress();
         breader.close();
@@ -65,9 +65,9 @@ public class HuffmanDecoding {
             String codeword = breader.readNextCodeword();
             if (codeword != null) {
                 if (i == 256) {
-                    codes.put(codeword, "EOF");
+                    codes.insertCodeword(codeword, "EOF");
                 } else {
-                    codes.put(codeword, BitConversions.integerAsByteString(i));
+                    codes.insertCodeword(codeword, BitConversions.integerAsByteString(i));
                 }
             }
         }
@@ -83,7 +83,7 @@ public class HuffmanDecoding {
         String bits = "";
         while (breader.hasNext()) {
             bits += breader.readBits(1);
-            if (codes.containsKey(bits)) {
+            if (codes.containsCodeword(bits)) {
                 if (codes.get(bits).equals("EOF")) {
                     break;
                 }
