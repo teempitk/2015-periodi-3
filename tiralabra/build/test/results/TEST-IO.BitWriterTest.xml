@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="Teemu-Air" name="IO.BitWriterTest" skipped="0" tests="4" time="0.11" timestamp="2015-02-04T18:35:30">
+<testsuite errors="0" failures="0" hostname="Teemu-Air" name="IO.BitWriterTest" skipped="0" tests="4" time="0.135" timestamp="2015-02-05T17:45:25">
   <properties>
     <property name="netbeans.autoupdate.country" value="FI" />
     <property name="nb.wait.for.caches" value="true" />
@@ -40,7 +40,7 @@
     <property name="user.name" value="teemupitkanen1" />
     <property name="copylibs.rebase" value="true" />
     <property name="libs.swing-layout.maven-pom" value="" />
-    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner IO.BitWriterTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/test/results/TEST-IO.BitWriterTest.xml crashfile=/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/junitvmwatcher4112098157661929941.properties propsfile=/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/junit8966821664630533032.properties" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner IO.BitWriterTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/test/results/TEST-IO.BitWriterTest.xml crashfile=/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/junitvmwatcher5502748032116614367.properties propsfile=/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/junit2074746642832594068.properties" />
     <property name="build.classes.dir" value="build/classes" />
     <property name="netbeans.accept_license_class" value="org.netbeans.license.AcceptLicense" />
     <property name="build.sysclasspath" value="ignore" />
@@ -186,6 +186,7 @@
     <property name="javadoc.encoding.used" value="UTF-8" />
     <property name="dist.jar" value="dist/tiralabra.jar" />
     <property name="libs.spring-framework400.maven-pom" value="" />
+    <property name="netbeans.automatic.build" value="true" />
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
     <property name="ant.project.name" value="tiralabra" />
     <property name="netbeans.hash.code" value="unique=NB_JAVA0eafdf5e2-7761-4fd6-85d8-c58a1f6ebf2a_c5cf55b3-8f34-464c-a69d-9a5ab413e8f4" />
@@ -307,8 +308,8 @@
     <property name="platform.active" value="default_platform" />
     <property name="awt.toolkit" value="sun.lwawt.macosx.LWCToolkit" />
   </properties>
-  <testcase classname="IO.BitWriterTest" name="writingASCIICharactersAsBytesWorksTest" time="0.028" />
-  <testcase classname="IO.BitWriterTest" name="writingSeveralButesInOneStringWorksTest" time="0.001" />
+  <testcase classname="IO.BitWriterTest" name="writingASCIICharactersAsBytesWorksTest" time="0.022" />
+  <testcase classname="IO.BitWriterTest" name="writingSeveralButesInOneStringWorksTest" time="0.0" />
   <testcase classname="IO.BitWriterTest" name="writingUnevenBytesWorksTest" time="0.0" />
   <testcase classname="IO.BitWriterTest" name="writeTheLastBitsCorrectlyFillsTheLastByteWithZeros" time="0.0" />
   <system-out><![CDATA[]]></system-out>

@@ -105,6 +105,11 @@ public class CodewordDictionary {
         return null;
     }
 
+    /**
+     * Palauttaa taulussa olevien käännösten lukumäärän.
+     *
+     * @return käännösten lkm.
+     */
     public int size() {
         return size;
     }

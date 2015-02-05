@@ -48,6 +48,11 @@ public class OrderedLinkedList {
         if (first == null) {
             first = node;
             return;
+        }       
+        if(first.compareTo(node)>0){
+            node.setNext(first);
+            first=node;
+            return;
         }
         ListNode spot = first;
         while (spot.getNext() != null && spot.getNext().compareTo(node) < 0) {
