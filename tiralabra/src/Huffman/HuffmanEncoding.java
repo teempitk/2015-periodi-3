@@ -47,13 +47,25 @@ public class HuffmanEncoding {
         freqs = new int[257];
         freqs[256] = 1;
         breader = new FileInputStream(new File(inFile));
+        long startCountBytes = System.nanoTime();
         countDifferentBytesInFile();
+        long finishCountBytes = System.nanoTime();
+        System.out.println("Time to count bytes: "+(finishCountBytes -startCountBytes)*1.0e-9+" sec");
         breader.close();
+        long startBuildTree = System.nanoTime();// POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!
         codes = HuffmanTree.huffmanCodewords(freqs);
+        long finishBuildTree = System.nanoTime();// POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!
+        System.out.println("Time to build HuffmanTree: "+(finishBuildTree -startBuildTree)*1.0e-9+" sec");// POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!
         bwriter = new BitWriter(new File(outFile));
+        long startWriteEncoding = System.nanoTime();
         writeEncodingToTheStartOfFile();
+        long finishWriteEncoding = System.nanoTime();
+        System.out.println("Time to write encodings: "+(finishWriteEncoding -startWriteEncoding)*1.0e-9+" sec");
+        long startWriteData = System.nanoTime();
         writeToFileAsBits(inFile, outFile);
         bwriter.writeTheLastBits(codes[256]);
+        long finishWriteData = System.nanoTime();
+        System.out.println("Time to write data: "+(finishWriteData -startWriteData)*1.0e-9+" sec");
     }
 
     /**

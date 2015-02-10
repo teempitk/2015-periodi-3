@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Huffman;
 
 import IO.BitWriter;
@@ -62,12 +58,15 @@ public class HuffmanDecodingTest {
     @After
     public void tearDown() {
         file.delete();
+        File file2=new File("decodingtestoutput");
+        file2.delete();
     }
 
     @Test
     public void decoderDecodesMessageCorrectly() throws IOException{
-        HuffmanDecoding.decode("decodingtestinput", "decodingtestputput");
-        Scanner scan = new Scanner(new File("decodingtestputput"));
+        HuffmanDecoding.decode("decodingtestinput", "decodingtestoutput");
+        Scanner scan = new Scanner(new File("decodingtestoutput"));
         assertEquals("ABCCA",scan.nextLine());
     }
+  
 }

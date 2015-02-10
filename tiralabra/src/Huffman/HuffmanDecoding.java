@@ -48,15 +48,21 @@ public class HuffmanDecoding {
         breader = new BitReader(new File(inFile));
         bwriter = new BitWriter(new File(outFile));
         codes = new CodewordDictionary();
+        long startReadingCodewords = System.nanoTime();
         readCodewordsFromFile();
+        long stopReadingCodewords = System.nanoTime();
+        System.out.println("Time to read codewords from file: "+(stopReadingCodewords-startReadingCodewords)*1.0e-9+" sec");
+        long startT = System.nanoTime();
         decompress();
+        long stopT = System.nanoTime();
+        System.out.println("Time to decompress when the codewords have been obtained: "+(stopT-startT)*1.0e-9+" sec");
         breader.close();
         bwriter.writeTheLastBits("");
     }
 
     /**
      * Käytetään ensimmäisenä purussa, lukee kaikki koodisanat tiedoston alusta
-     * ja tallentaa ne mappiin käyttöä varten.
+     * ja tallentaa ne hajautustauluun käyttöä varten.
      *
      * @throws IOException
      */

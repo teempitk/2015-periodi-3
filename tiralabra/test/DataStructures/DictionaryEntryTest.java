@@ -35,11 +35,9 @@ public class DictionaryEntryTest {
     
     @Before
     public void setUp() {
-        entry1=new DictionaryEntry("code1","byte1");
-        entry2=new DictionaryEntry("code2","byte2");
-        entry3=new DictionaryEntry("code3","byte3");
-        entry1.setNext(entry2);
-        entry2.setNext(entry3);
+        entry3=new DictionaryEntry("code3","byte3",null);
+        entry2=new DictionaryEntry("code2","byte2",entry3);
+        entry1=new DictionaryEntry("code1","byte1",entry2);
     }
     
     @After

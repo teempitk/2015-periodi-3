@@ -17,9 +17,10 @@ public class CodewordDictionary {
     private final DictionaryEntry[] encodings;
     /**
      * Hajautustaulun koko. Hajautustauluun laitetaan maksimissaan 257 entryä,
-     * joten täyttöaste on noin puolet.
+     * joten täyttöaste on noin 1,5. Hyvä hajautustaulun koko on alkuluku ja
+     * kaukana kahden potensseista, (2^8+2^9)/2=384.
      */
-    private final int TABLE_SIZE = 500;
+    private final int TABLE_SIZE = 383;
     /**
      * CodewordDictionaryssa olevien käännösten lukumäärä.
      */
@@ -37,23 +38,15 @@ public class CodewordDictionary {
      * InsertCodeword-metodi lisää koodisanakäännöksen sanakirjaan. Koodisanat
      * sijoitetaan hajautustauluun String.hashCode-hajautusfunktion mukaisesti,
      * ja jos hajautustaulun paikka on varattu, menee uusi käännös paikassa
-     * olevan käännöksen ylivuotolistaan.
+     * olevan käännöksen ylivuotolistan ensimmäiseksi.
      *
      * @param codeword Käännöksen koodisana (hajautustaulun avain).
      * @param bitstring Koodisanan käännös (hajautustaulun arvo).
      */
     public void insertCodeword(String codeword, String bitstring) {
-        DictionaryEntry newEntry = new DictionaryEntry(codeword, bitstring);
-        int index = Math.abs(codeword.hashCode() % TABLE_SIZE);
-        if (encodings[index] == null) {
-            encodings[index] = newEntry;
-        } else {
-            DictionaryEntry prev = encodings[index];
-            while (prev.getNext() != null) {
-                prev = prev.getNext();
-            }
-            prev.setNext(newEntry);
-        }
+        int index = hash(codeword);
+        DictionaryEntry next = encodings[index];
+        encodings[index] = new DictionaryEntry(codeword, bitstring, next);
         size++;
     }
 
@@ -65,7 +58,7 @@ public class CodewordDictionary {
      * @return true, jos sana on sanakirjassa. Muuten false.
      */
     public boolean containsCodeword(String codeword) {
-        int index = Math.abs(codeword.hashCode() % TABLE_SIZE);
+        int index = hash(codeword);
         if (encodings[index] == null) {
             return false;
         } else if (encodings[index].getCodeword().equals(codeword)) {
@@ -92,7 +85,7 @@ public class CodewordDictionary {
         if (!containsCodeword(codeword)) {
             return null;
         }
-        DictionaryEntry entry = encodings[Math.abs(codeword.hashCode() % TABLE_SIZE)];
+        DictionaryEntry entry = encodings[hash(codeword)];
         if (entry.getCodeword().equals(codeword)) {
             return entry.getBitstring();
         }
@@ -103,6 +96,19 @@ public class CodewordDictionary {
             }
         }
         return null;
+    }
+
+    /**
+     * Laskee hajautusfunktion arvon koodisanalle.
+     * @param codeword koodisana, jolle lasketaan.
+     * @return Hajautusfunktion arvo.
+     */
+    private int hash(String codeword) {
+        int index = (codeword.hashCode() % TABLE_SIZE);
+        if (index < 0) {
+            index += TABLE_SIZE;
+        }
+        return index;
     }
 
     /**

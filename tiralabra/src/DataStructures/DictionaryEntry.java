@@ -29,10 +29,12 @@ public class DictionaryEntry {
      *
      * @param codeword Lisättävän käännöksen koodisana (hajautustaulun avain)
      * @param bitstring Lisättävän koodisanan käännös (hajautustaulun arvo)
+     * @param next Ylivuotoketjussa seuraava alkio
      */
-    public DictionaryEntry(String codeword, String bitstring) {
+    public DictionaryEntry(String codeword, String bitstring, DictionaryEntry next) {
         this.bitString = bitstring;
         this.codeword = codeword;
+        this.next=next;
     }
     /**
      * Palauttaa alkiota vastaavan käännöksen (lähdetekstin osa).
@@ -40,13 +42,6 @@ public class DictionaryEntry {
      */
     public String getBitstring() {
         return bitString;
-    }
-    /**
-     * Lisää tätä alkiota seuraavan alkion ylivuotolistaan.
-     * @param next Ylivuotolistan seuraava alkio.
-     */
-    public void setNext(DictionaryEntry next) {
-        this.next = next;
     }
     /**
      * Palauttaa ylivuotolistan seuraavan alkion.
