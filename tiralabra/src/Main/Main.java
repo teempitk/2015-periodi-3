@@ -2,6 +2,7 @@ package Main;
 
 import Huffman.HuffmanDecoding;
 import Huffman.HuffmanEncoding;
+import Tranforms.MoveToFront;
 import java.io.IOException;
 
 public class Main {
@@ -11,29 +12,29 @@ public class Main {
         args = new String[3];
 
 // SAMPLE FILE1: ALICE'S ADVENTURES IN WONDERLAND (TEXT)
-//        args[0] = "c";
-//        args[1] = "sampleFiles/alice.txt";
-//        args[2] = "sampleFiles/pakattuAlice";
+        args[0] = "c";
+        args[1] = "sampleFiles/alice.txt";
+        args[2] = "sampleFiles/pakattuAlice";
 //        args[0] = "d";
 //        args[1] = "sampleFiles/pakattuAlice";
 //        args[2] = "sampleFiles/purettuAlice.txt";
-
 // SAMPLE FILE 2: JPG
 //        args[0] = "c";
 //        args[1] = "sampleFiles/turing.jpg";
 //        args[2] = "sampleFiles/pakattuTuring";
 //        
-        args[0] = "d";
-        args[1] = "sampleFiles/pakattuTuring";
-        args[2] = "sampleFiles/purettuTuring.jpg";
+//        args[0] = "d";
+//        args[1] = "sampleFiles/pakattuTuring";
+//        args[2] = "sampleFiles/purettuTuring.jpg";
         
         long startTime = System.nanoTime();
         
-        if (args.length != 3 || !args[0].equalsIgnoreCase("c") && !args[0].equalsIgnoreCase("d")) {
+        if (args.length != 3) {
             printInstructionsAndQuit();
         }
         if (args[0].equalsIgnoreCase("c")) {
-            HuffmanEncoding.encode(args[1], args[2]);
+          //  MoveToFront.transform(args[1], "sampleFiles/temp");
+            HuffmanEncoding.encode("sampleFiles/temp", args[2]);
         } else if (args[0].equalsIgnoreCase("d")) {
             HuffmanDecoding.decode(args[1], args[2]);
         } else {

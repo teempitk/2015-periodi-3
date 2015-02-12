@@ -52,10 +52,10 @@ public class HuffmanEncoding {
         long finishCountBytes = System.nanoTime();
         System.out.println("Time to count bytes: "+(finishCountBytes -startCountBytes)*1.0e-9+" sec");
         breader.close();
-        long startBuildTree = System.nanoTime();// POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!
+        long startBuildTree = System.nanoTime();
         codes = HuffmanTree.huffmanCodewords(freqs);
-        long finishBuildTree = System.nanoTime();// POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!
-        System.out.println("Time to build HuffmanTree: "+(finishBuildTree -startBuildTree)*1.0e-9+" sec");// POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!POISTA!
+        long finishBuildTree = System.nanoTime();
+        System.out.println("Time to build HuffmanTree: "+(finishBuildTree -startBuildTree)*1.0e-9+" sec");
         bwriter = new BitWriter(new File(outFile));
         long startWriteEncoding = System.nanoTime();
         writeEncodingToTheStartOfFile();
