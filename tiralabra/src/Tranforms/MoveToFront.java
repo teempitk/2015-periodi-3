@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -44,11 +45,24 @@ public class MoveToFront {
      * @throws IOException
      */
     public static void transform(String inputFile, String outputFile) throws IOException {
+
+        System.out.println("Move to front transformation started");
+        long mtfStartTime = System.nanoTime();
+
+        long initStartTime = System.nanoTime();
+        System.out.print("Phase 1/2. Initializing variables ... ");
         initializeVars(inputFile, outputFile);
+        System.out.println("\t\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - initStartTime) * 1.0e-9) + " sec");
+
+        long replacingStartTime = System.nanoTime();
+        System.out.print("Phase 2/2. Replacing bytes with indices ... ");
         for (int i = 0; i < data.length; i++) {
             fstream.write((byte) mtf(data[i]));
         }
         fstream.close();
+        System.out.println("\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - replacingStartTime) * 1.0e-9) + " sec");
+
+        System.out.println("Move to front transform finished. Total time: " + (System.nanoTime() - mtfStartTime) * 1.0e-9 + " sec");
     }
 
     /**
@@ -69,11 +83,12 @@ public class MoveToFront {
      * Alustaa byteListin, tällä hetkellä mielivaltaiseen järjestykseen.
      */
     private static void initializeByteList() {
-        byteList = new ArrayList<>();
+        byteList = new LinkedList<>();
         for (int i = -128; i < 128; i++) {
             byteList.add((byte) i);
         }
     }
+
 
     /**
      * Metodi mtf hakee byteLististä tavun indeksin, ja siirttää sitten tavun
@@ -103,16 +118,30 @@ public class MoveToFront {
 
     /**
      * Tekee muunnoksen "purkuvaiheessa".
+     *
      * @param inputFile Tiedosto, josta muunnettu data luetaan.
      * @param outputFile Tiedosto, johon purettu data kirjoitetaan.
-     * @throws IOException 
+     * @throws IOException
      */
     public static void reverseTransform(String inputFile, String outputFile) throws IOException {
+        System.out.println("Move to front transform started");
+        long mtfStartTime = System.nanoTime();
+
+        long initStartTime = System.nanoTime();
+        System.out.print("Phase 1/2. Initializing variables ... ");
         initializeVars(inputFile, outputFile);
+        System.out.println("\t\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - initStartTime) * 1.0e-9) + " sec");
+        
+        System.out.print("Phase 2/2. Replacing bytes with indices ... ");
+        long replacingStartTime = System.nanoTime();
         for (int i = 0; i < data.length; i++) {
             fstream.write(byteList.get(data[i] + 128));
             mtf(data[i] + 128);
         }
         fstream.close();
+        System.out.println("\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - replacingStartTime) * 1.0e-9) + " sec");
+
+        System.out.println("Move to front transform finished. Total time: " + (System.nanoTime() - mtfStartTime) * 1.0e-9 + " sec");
+    
     }
 }

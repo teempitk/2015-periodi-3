@@ -1,5 +1,7 @@
 package DataStructures;
 
+import java.util.Arrays;
+
 /**
  * DocewordDictionary-oliota käytetään (koodaus, alkuperäinen bittijono) -parien
  * tallentamiseen. Luokka on toteutettu hajautuksen avulla, joten purkaessa

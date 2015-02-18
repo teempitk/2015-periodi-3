@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="Teemu-Air" name="Huffman.HuffmanDecodingTest" skipped="0" tests="1" time="0.111" timestamp="2015-02-18T11:40:30">
+<testsuite errors="0" failures="0" hostname="Teemu-Air" name="Huffman.HuffmanDecodingTest" skipped="0" tests="1" time="0.151" timestamp="2015-02-18T16:37:14">
   <properties>
     <property name="netbeans.autoupdate.country" value="FI" />
     <property name="nb.wait.for.caches" value="true" />
@@ -40,7 +40,7 @@
     <property name="user.name" value="teemupitkanen1" />
     <property name="copylibs.rebase" value="true" />
     <property name="libs.swing-layout.maven-pom" value="" />
-    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner Huffman.HuffmanDecodingTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/test/results/TEST-Huffman.HuffmanDecodingTest.xml crashfile=/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/junitvmwatcher4339058528235415607.properties propsfile=/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/junit2687164148569029081.properties" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner Huffman.HuffmanDecodingTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/test/results/TEST-Huffman.HuffmanDecodingTest.xml crashfile=/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/junitvmwatcher3348410873614080416.properties propsfile=/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/junit3582335919648066769.properties" />
     <property name="build.classes.dir" value="build/classes" />
     <property name="netbeans.accept_license_class" value="org.netbeans.license.AcceptLicense" />
     <property name="build.sysclasspath" value="ignore" />
@@ -186,7 +186,6 @@
     <property name="javadoc.encoding.used" value="UTF-8" />
     <property name="dist.jar" value="dist/tiralabra.jar" />
     <property name="libs.spring-framework400.maven-pom" value="" />
-    <property name="netbeans.automatic.build" value="true" />
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
     <property name="ant.project.name" value="tiralabra" />
     <property name="netbeans.hash.code" value="unique=NB_JAVA0eafdf5e2-7761-4fd6-85d8-c58a1f6ebf2a_c5cf55b3-8f34-464c-a69d-9a5ab413e8f4" />
@@ -308,9 +307,11 @@
     <property name="platform.active" value="default_platform" />
     <property name="awt.toolkit" value="sun.lwawt.macosx.LWCToolkit" />
   </properties>
-  <testcase classname="Huffman.HuffmanDecodingTest" name="decoderDecodesMessageCorrectly" time="0.03" />
-  <system-out><![CDATA[Time to read codewords from file: 0.004019 sec
-Time to decompress when the codewords have been obtained: 2.9E-4 sec
+  <testcase classname="Huffman.HuffmanDecodingTest" name="decoderDecodesMessageCorrectly" time="0.049" />
+  <system-out><![CDATA[Huffman decoding started.
+Phase 1/2. Reading codewords ... 		 Finished. Time: 0,010 sec
+Phase 2/2. Translating data ... 		 Finished. Time: 0,001 sec
+Huffman Decoding finished. Total time: 0.023017000000000003 sec
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

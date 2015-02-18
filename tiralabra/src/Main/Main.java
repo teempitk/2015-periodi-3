@@ -3,53 +3,56 @@ package Main;
 import Huffman.HuffmanDecoding;
 import Huffman.HuffmanEncoding;
 import Tranforms.MoveToFront;
+import java.io.File;
 import java.io.IOException;
 
 public class Main {
 
+    private static long startTime;
+
+    private static File temp;
+
+    private static File input;
+
+    private static File output;
+
     public static void main(String[] args) throws IOException {
+        startTime = System.nanoTime();
+        temp = new File("RemovableTemporaryFileForCompressionIntermediateResults");
 
-        args = new String[3];
-
-// SAMPLE FILE1: ALICE'S ADVENTURES IN WONDERLAND (TEXT)
-//        args[0] = "c";
-//        args[1] = "sampleFiles/alice.txt";
-//        args[2] = "sampleFiles/pakattuAlice";
-//        args[0] = "d";
-//        args[1] = "sampleFiles/pakattuAlice";
-//        args[2] = "sampleFiles/purettuAlice.txt";
-// SAMPLE FILE 2: JPG
-//        args[0] = "c";
-//        args[1] = "sampleFiles/turing.jpg";
-//        args[2] = "sampleFiles/pakattuTuring";
-//        
-//        args[0] = "d";
-//        args[1] = "sampleFiles/pakattuTuring";
-//        args[2] = "sampleFiles/purettuTuring.jpg";
-//  SAMPLE FILE 3: U00096.2.fas (Genomic data ~1MB)
-//        args[0] = "c";
-//        args[1] = "sampleFiles/U00096.2.fas";
-//        args[2] = "sampleFiles/U00096.2.fas.pakattu";
-        args[0] = "d";
-        args[1] = "sampleFiles/U00096.2.fas.pakattu";
-        args[2] = "sampleFiles/U00096.2.fas.purettu";
-        
-        long startTime = System.nanoTime();
-        
         if (args.length != 3) {
             printInstructionsAndQuit();
         }
+        input = new File(args[1]);
+        output = new File(args[2]);
+        
         if (args[0].equalsIgnoreCase("c")) {
-            MoveToFront.transform(args[1], "sampleFiles/temp");
-            HuffmanEncoding.encode("sampleFiles/temp", args[2]);
+            compress(args);
         } else if (args[0].equalsIgnoreCase("d")) {
-            HuffmanDecoding.decode(args[1], "sampleFiles/temp");
-            MoveToFront.reverseTransform("sampleFiles/temp", args[2]);
+            decompress(args);
         } else {
             printInstructionsAndQuit();
         }
+        temp.delete();
+    }
+
+    private static void decompress(String[] args) throws IOException {
+        System.out.println("Decompression started.");
+
+        HuffmanDecoding.decode(args[1], temp.getName());
+        MoveToFront.reverseTransform(temp.getName(), args[2]);
+
         long finishTime = System.nanoTime();
-        System.out.println("Total runtime: "+(finishTime-startTime)*1.0e-9+" sec");
+        System.out.println("Decompression finished. Total time: " + (finishTime - startTime) * 1.0e-9 + " sec.");
+    }
+
+    private static void compress(String[] args) throws IOException {
+        System.out.println("Compression started.");
+        MoveToFront.transform(args[1], temp.getName());
+        HuffmanEncoding.encode(temp.getName(), args[2]);
+        long finishTime = System.nanoTime();
+        System.out.println("Compression finished. Total time: " + (finishTime - startTime) * 1.0e-9 + " sec.");
+        System.out.println("File size reduced from "+input.length() + " bytes to "+output.length()+" bytes ("+String.format("%.1f", 100.0*output.length()/input.length())+"% of original size).");
     }
 
     private static void printInstructionsAndQuit() {

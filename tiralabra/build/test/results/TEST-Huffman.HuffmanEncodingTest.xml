@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="Teemu-Air" name="Huffman.HuffmanEncodingTest" skipped="0" tests="4" time="0.111" timestamp="2015-02-18T11:40:31">
+<testsuite errors="0" failures="0" hostname="Teemu-Air" name="Huffman.HuffmanEncodingTest" skipped="0" tests="4" time="0.135" timestamp="2015-02-18T16:37:14">
   <properties>
     <property name="netbeans.autoupdate.country" value="FI" />
     <property name="nb.wait.for.caches" value="true" />
@@ -40,7 +40,7 @@
     <property name="user.name" value="teemupitkanen1" />
     <property name="copylibs.rebase" value="true" />
     <property name="libs.swing-layout.maven-pom" value="" />
-    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner Huffman.HuffmanEncodingTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/test/results/TEST-Huffman.HuffmanEncodingTest.xml crashfile=/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/junitvmwatcher2744607020856030537.properties propsfile=/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/junit3694321943632679766.properties" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner Huffman.HuffmanEncodingTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/test/results/TEST-Huffman.HuffmanEncodingTest.xml crashfile=/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/junitvmwatcher7799060803163071788.properties propsfile=/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/junit7490376811307474308.properties" />
     <property name="build.classes.dir" value="build/classes" />
     <property name="netbeans.accept_license_class" value="org.netbeans.license.AcceptLicense" />
     <property name="build.sysclasspath" value="ignore" />
@@ -186,7 +186,6 @@
     <property name="javadoc.encoding.used" value="UTF-8" />
     <property name="dist.jar" value="dist/tiralabra.jar" />
     <property name="libs.spring-framework400.maven-pom" value="" />
-    <property name="netbeans.automatic.build" value="true" />
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
     <property name="ant.project.name" value="tiralabra" />
     <property name="netbeans.hash.code" value="unique=NB_JAVA0eafdf5e2-7761-4fd6-85d8-c58a1f6ebf2a_c5cf55b3-8f34-464c-a69d-9a5ab413e8f4" />
@@ -308,26 +307,34 @@
     <property name="platform.active" value="default_platform" />
     <property name="awt.toolkit" value="sun.lwawt.macosx.LWCToolkit" />
   </properties>
-  <testcase classname="Huffman.HuffmanEncodingTest" name="huffmanEncodingOfAFileContainingOneChar5TimesShouldStillBe258BytesTest" time="0.018" />
-  <testcase classname="Huffman.HuffmanEncodingTest" name="huffmanEncodingOfAFileContainingOneChar6TimesShouldBe259BytesTest" time="0.003" />
-  <testcase classname="Huffman.HuffmanEncodingTest" name="fileSizeMatchesForMoreComplicatedFileTest" time="0.004" />
-  <testcase classname="Huffman.HuffmanEncodingTest" name="huffmanEncodingOfAOneCharTextFileShouldBe258BytesTest" time="0.002" />
-  <system-out><![CDATA[Time to count bytes: 0.001364 sec
-Time to build HuffmanTree: 0.005677000000000001 sec
-Time to write encodings: 0.001266 sec
-Time to write data: 1.61E-4 sec
-Time to count bytes: 7.000000000000001E-5 sec
-Time to build HuffmanTree: 2.9E-5 sec
-Time to write encodings: 0.0013230000000000002 sec
-Time to write data: 2.68E-4 sec
-Time to count bytes: 1.62E-4 sec
-Time to build HuffmanTree: 8.5E-5 sec
-Time to write encodings: 0.001018 sec
-Time to write data: 2.61E-4 sec
-Time to count bytes: 2.6000000000000002E-5 sec
-Time to build HuffmanTree: 3.5000000000000004E-5 sec
-Time to write encodings: 0.0011760000000000002 sec
-Time to write data: 1.52E-4 sec
+  <testcase classname="Huffman.HuffmanEncodingTest" name="fileSizeMatchesForMoreComplicatedFileTest" time="0.039" />
+  <testcase classname="Huffman.HuffmanEncodingTest" name="huffmanEncodingOfAFileContainingOneChar5TimesShouldStillBe258BytesTest" time="0.003" />
+  <testcase classname="Huffman.HuffmanEncodingTest" name="huffmanEncodingOfAFileContainingOneChar6TimesShouldBe259BytesTest" time="0.007" />
+  <testcase classname="Huffman.HuffmanEncodingTest" name="huffmanEncodingOfAOneCharTextFileShouldBe258BytesTest" time="0.003" />
+  <system-out><![CDATA[Huffman encoding started
+Phase 1/4. Counting bytes ... 			 Finished. Time: 0,021 sec
+Phase 2/4. Building Huffman tree ... 		 Finished. Time: 0,004 sec
+Phase 3/4. Writing encoding ...  		 Finished. Time: 0,002 sec
+Phase 4/4. Writing data ...  			 Finished. Time: 0,000 sec
+Huffman Encoding finished. Total time: 0.031952 sec
+Huffman encoding started
+Phase 1/4. Counting bytes ... 			 Finished. Time: 0,000 sec
+Phase 2/4. Building Huffman tree ... 		 Finished. Time: 0,000 sec
+Phase 3/4. Writing encoding ...  		 Finished. Time: 0,001 sec
+Phase 4/4. Writing data ...  			 Finished. Time: 0,000 sec
+Huffman Encoding finished. Total time: 0.002004 sec
+Huffman encoding started
+Phase 1/4. Counting bytes ... 			 Finished. Time: 0,001 sec
+Phase 2/4. Building Huffman tree ... 		 Finished. Time: 0,000 sec
+Phase 3/4. Writing encoding ...  		 Finished. Time: 0,001 sec
+Phase 4/4. Writing data ...  			 Finished. Time: 0,001 sec
+Huffman Encoding finished. Total time: 0.004409000000000001 sec
+Huffman encoding started
+Phase 1/4. Counting bytes ... 			 Finished. Time: 0,000 sec
+Phase 2/4. Building Huffman tree ... 		 Finished. Time: 0,000 sec
+Phase 3/4. Writing encoding ...  		 Finished. Time: 0,001 sec
+Phase 4/4. Writing data ...  			 Finished. Time: 0,000 sec
+Huffman Encoding finished. Total time: 0.0025410000000000003 sec
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

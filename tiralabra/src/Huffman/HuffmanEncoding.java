@@ -3,8 +3,9 @@ package Huffman;
 import IO.BitWriter;
 import Utils.BitConversions;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * HuffmanEncoding on täyden palvelun luokka Huffman-koodaukseen. Luokan ydin,
@@ -31,10 +32,6 @@ public class HuffmanEncoding {
      * Bitwriter-olio hoitaa bittitason tiedostoon kirjoittamisen.
      */
     private static BitWriter bwriter;
-    /**
-     * Pakattavan tiedoston lukemiseen käytettävä ByteReader
-     */
-    private static FileInputStream breader;
 
     /**
      * Luokan ydinmetodi, jota kutsumalla tiedoston pakkaus tapahtuu.
@@ -44,28 +41,32 @@ public class HuffmanEncoding {
      * @throws java.io.IOException
      */
     public static void encode(String inFile, String outFile) throws IOException {
-        freqs = new int[257];
-        freqs[256] = 1;
-        breader = new FileInputStream(new File(inFile));
-        long startCountBytes = System.nanoTime();
-        countDifferentBytesInFile();
-        long finishCountBytes = System.nanoTime();
-        System.out.println("Time to count bytes: "+(finishCountBytes -startCountBytes)*1.0e-9+" sec");
-        breader.close();
-        long startBuildTree = System.nanoTime();
+        System.out.println("Huffman encoding started");
+        long encodingStartTime = System.nanoTime();
+
+        long countingStartTime = System.nanoTime();
+        System.out.print("Phase 1/4. Counting bytes ... ");
+        countDifferentBytesInFile(inFile);
+        System.out.println("\t\t\t Finished. Time: " + String.format("%.3f",(System.nanoTime() - countingStartTime) * 1.0e-9) + " sec");
+
+        long buildingStartTime = System.nanoTime();
+        System.out.print("Phase 2/4. Building Huffman tree ... ");
         codes = HuffmanTree.huffmanCodewords(freqs);
-        long finishBuildTree = System.nanoTime();
-        System.out.println("Time to build HuffmanTree: "+(finishBuildTree -startBuildTree)*1.0e-9+" sec");
+        System.out.println("\t\t Finished. Time: " + String.format("%.3f",(System.nanoTime() - buildingStartTime) * 1.0e-9) + " sec");
+
+        long writeEncodingStartTime = System.nanoTime();
+        System.out.print("Phase 3/4. Writing encoding ...  ");
         bwriter = new BitWriter(new File(outFile));
-        long startWriteEncoding = System.nanoTime();
         writeEncodingToTheStartOfFile();
-        long finishWriteEncoding = System.nanoTime();
-        System.out.println("Time to write encodings: "+(finishWriteEncoding -startWriteEncoding)*1.0e-9+" sec");
-        long startWriteData = System.nanoTime();
-        writeToFileAsBits(inFile, outFile);
+        System.out.println("\t\t Finished. Time: " + String.format("%.3f",(System.nanoTime() - writeEncodingStartTime) * 1.0e-9) + " sec");
+
+        long writeDataStartTime = System.nanoTime();
+        System.out.print("Phase 4/4. Writing data ...  ");
+        writeToFileAsBits(inFile);
         bwriter.writeTheLastBits(codes[256]);
-        long finishWriteData = System.nanoTime();
-        System.out.println("Time to write data: "+(finishWriteData -startWriteData)*1.0e-9+" sec");
+        System.out.println("\t\t\t Finished. Time: " + String.format("%.3f",(System.nanoTime() - writeDataStartTime) * 1.0e-9) + " sec");
+
+        System.out.println("Huffman Encoding finished. Total time: " + (System.nanoTime() - encodingStartTime) * 1.0e-9 + " sec");
     }
 
     /**
@@ -75,24 +76,31 @@ public class HuffmanEncoding {
      * @param outFile Kohdetiedosto
      * @throws IOException
      */
-    private static void writeToFileAsBits(String inFile, String outFile) throws IOException {
-        breader = new FileInputStream(new File(inFile));
-        while (breader.available() > 0) {
-            int byteRead = breader.read();
-            if (byteRead < 0) {
-                byteRead += 256;
+    private static void writeToFileAsBits(String inFile) throws IOException {
+        byte[] data = Files.readAllBytes(Paths.get(inFile));
+        for (int i = 0; i < data.length; i++) {
+            int byteToWrite = data[i];
+            if (byteToWrite < 0) {
+                byteToWrite += 256;
             }
-            bwriter.writeBits(codes[byteRead]);
+            bwriter.writeBits(codes[byteToWrite]);
         }
-        breader.close();
     }
 
     /**
      * Laskee kunkin erilaisen tavun esiintymismäärät pakattavassa tiedostossa.
      */
-    private static void countDifferentBytesInFile() throws IOException {
-        while (breader.available() > 0) {
-            freqs[breader.read()]++;
+    private static void countDifferentBytesInFile(String inFile) throws IOException {
+        byte[] data = Files.readAllBytes(Paths.get(inFile));
+        freqs = new int[257];
+        freqs[256] = 1;
+        for (int i = 0; i < data.length; i++) {
+            if (data[i] < 0) {
+                freqs[data[i] + 256]++;
+            } else {
+                freqs[data[i]]++;
+            }
+
         }
     }
 
