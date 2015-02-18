@@ -15,12 +15,23 @@ public class BurrowsWheeler{
     
     private static byte[] data;
     
+    private static int[] lines;
+    
     public static void transform(String inputFile, String outputFile) throws IOException{
         Path pathToOriginalData = Paths.get(inputFile);
         data = Files.readAllBytes(pathToOriginalData);
-        int[] lines = new int[data.length];
+        lines = new int[data.length];
         for(int i=0;i<lines.length;i++){
             lines[i]=i;
         }
+        quickSortLines();
+    }
+
+    private static void quickSortLines() {
+        
+    }
+    
+    private int compare(){
+        return 0;
     }
 }

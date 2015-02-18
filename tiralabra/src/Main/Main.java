@@ -12,9 +12,9 @@ public class Main {
         args = new String[3];
 
 // SAMPLE FILE1: ALICE'S ADVENTURES IN WONDERLAND (TEXT)
-        args[0] = "c";
-        args[1] = "sampleFiles/alice.txt";
-        args[2] = "sampleFiles/pakattuAlice";
+//        args[0] = "c";
+//        args[1] = "sampleFiles/alice.txt";
+//        args[2] = "sampleFiles/pakattuAlice";
 //        args[0] = "d";
 //        args[1] = "sampleFiles/pakattuAlice";
 //        args[2] = "sampleFiles/purettuAlice.txt";
@@ -26,6 +26,13 @@ public class Main {
 //        args[0] = "d";
 //        args[1] = "sampleFiles/pakattuTuring";
 //        args[2] = "sampleFiles/purettuTuring.jpg";
+//  SAMPLE FILE 3: U00096.2.fas (Genomic data ~1MB)
+//        args[0] = "c";
+//        args[1] = "sampleFiles/U00096.2.fas";
+//        args[2] = "sampleFiles/U00096.2.fas.pakattu";
+        args[0] = "d";
+        args[1] = "sampleFiles/U00096.2.fas.pakattu";
+        args[2] = "sampleFiles/U00096.2.fas.purettu";
         
         long startTime = System.nanoTime();
         
@@ -33,10 +40,11 @@ public class Main {
             printInstructionsAndQuit();
         }
         if (args[0].equalsIgnoreCase("c")) {
-          //  MoveToFront.transform(args[1], "sampleFiles/temp");
+            MoveToFront.transform(args[1], "sampleFiles/temp");
             HuffmanEncoding.encode("sampleFiles/temp", args[2]);
         } else if (args[0].equalsIgnoreCase("d")) {
-            HuffmanDecoding.decode(args[1], args[2]);
+            HuffmanDecoding.decode(args[1], "sampleFiles/temp");
+            MoveToFront.reverseTransform("sampleFiles/temp", args[2]);
         } else {
             printInstructionsAndQuit();
         }

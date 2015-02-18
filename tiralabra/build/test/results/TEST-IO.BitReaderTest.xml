@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="Teemu-Air" name="IO.BitReaderTest" skipped="0" tests="8" time="0.135" timestamp="2015-02-10T12:04:11">
+<testsuite errors="0" failures="0" hostname="Teemu-Air" name="IO.BitReaderTest" skipped="0" tests="8" time="0.101" timestamp="2015-02-18T11:40:37">
   <properties>
     <property name="netbeans.autoupdate.country" value="FI" />
     <property name="nb.wait.for.caches" value="true" />
@@ -40,7 +40,7 @@
     <property name="user.name" value="teemupitkanen1" />
     <property name="copylibs.rebase" value="true" />
     <property name="libs.swing-layout.maven-pom" value="" />
-    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner IO.BitReaderTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/test/results/TEST-IO.BitReaderTest.xml crashfile=/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/junitvmwatcher6083813060255392837.properties propsfile=/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/junit2806238665256064646.properties" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner IO.BitReaderTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/test/results/TEST-IO.BitReaderTest.xml crashfile=/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/junitvmwatcher1515005013136059408.properties propsfile=/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/build/junit7298681888881553095.properties" />
     <property name="build.classes.dir" value="build/classes" />
     <property name="netbeans.accept_license_class" value="org.netbeans.license.AcceptLicense" />
     <property name="build.sysclasspath" value="ignore" />
@@ -186,6 +186,7 @@
     <property name="javadoc.encoding.used" value="UTF-8" />
     <property name="dist.jar" value="dist/tiralabra.jar" />
     <property name="libs.spring-framework400.maven-pom" value="" />
+    <property name="netbeans.automatic.build" value="true" />
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
     <property name="ant.project.name" value="tiralabra" />
     <property name="netbeans.hash.code" value="unique=NB_JAVA0eafdf5e2-7761-4fd6-85d8-c58a1f6ebf2a_c5cf55b3-8f34-464c-a69d-9a5ab413e8f4" />
@@ -307,11 +308,11 @@
     <property name="platform.active" value="default_platform" />
     <property name="awt.toolkit" value="sun.lwawt.macosx.LWCToolkit" />
   </properties>
-  <testcase classname="IO.BitReaderTest" name="readOneByteTest" time="0.008" />
-  <testcase classname="IO.BitReaderTest" name="readLessThanOneByteTest" time="0.002" />
-  <testcase classname="IO.BitReaderTest" name="readOneByteInTwoPartsTest" time="0.001" />
-  <testcase classname="IO.BitReaderTest" name="hasNextReturnsTrueWhenTestingOnNewFileTest" time="0.002" />
-  <testcase classname="IO.BitReaderTest" name="hasNextReturnsTrueWhenOneBitRemainingTest" time="0.0" />
+  <testcase classname="IO.BitReaderTest" name="readOneByteTest" time="0.005" />
+  <testcase classname="IO.BitReaderTest" name="readLessThanOneByteTest" time="0.001" />
+  <testcase classname="IO.BitReaderTest" name="readOneByteInTwoPartsTest" time="0.0" />
+  <testcase classname="IO.BitReaderTest" name="hasNextReturnsTrueWhenTestingOnNewFileTest" time="0.0" />
+  <testcase classname="IO.BitReaderTest" name="hasNextReturnsTrueWhenOneBitRemainingTest" time="0.001" />
   <testcase classname="IO.BitReaderTest" name="hasNextReturnsTrueWhenOneByteRemainingTest" time="0.001" />
   <testcase classname="IO.BitReaderTest" name="hasNextReturnsFalseWhenAllBitsReadTest" time="0.001" />
   <testcase classname="IO.BitReaderTest" name="whenReadingMoreBitsThanIsLeftReaderReturnsWhatItHasTest" time="0.001" />
