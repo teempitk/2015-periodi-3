@@ -2,6 +2,7 @@ package Main;
 
 import Huffman.HuffmanDecoding;
 import Huffman.HuffmanEncoding;
+import Tranforms.BurrowsWheeler;
 import Tranforms.MoveToFront;
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +12,7 @@ public class Main {
     private static long startTime;
 
     private static File temp;
+    private static File temp2;
 
     private static File input;
 
@@ -19,6 +21,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         startTime = System.nanoTime();
         temp = new File("RemovableTemporaryFileForCompressionIntermediateResults");
+        temp2 = new File("RemovableTemporaryFileForCompressionIntermediateResults2");
 
         if (args.length != 3) {
             printInstructionsAndQuit();
@@ -34,6 +37,7 @@ public class Main {
             printInstructionsAndQuit();
         }
         temp.delete();
+        temp2.delete();
     }
 
     private static void decompress(String[] args) throws IOException {
@@ -48,7 +52,8 @@ public class Main {
 
     private static void compress(String[] args) throws IOException {
         System.out.println("Compression started.");
-        MoveToFront.transform(args[1], temp.getName());
+        BurrowsWheeler.transform(args[1], temp2.getName());
+        MoveToFront.transform(temp2.getName(), temp.getName());
         HuffmanEncoding.encode(temp.getName(), args[2]);
         long finishTime = System.nanoTime();
         System.out.println("Compression finished. Total time: " + (finishTime - startTime) * 1.0e-9 + " sec.");
