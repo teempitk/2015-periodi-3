@@ -28,7 +28,7 @@ public class Main {
         }
         input = new File(args[1]);
         output = new File(args[2]);
-        
+
         if (args[0].equalsIgnoreCase("c")) {
             compress(args);
         } else if (args[0].equalsIgnoreCase("d")) {
@@ -55,9 +55,18 @@ public class Main {
         BurrowsWheeler.transform(args[1], temp2.getName());
         MoveToFront.transform(temp2.getName(), temp.getName());
         HuffmanEncoding.encode(temp.getName(), args[2]);
+        /*
+         Jos haluat kokeilla pakkausta, jonka voi purkaa, kommentoi tämän metodin ylläoleva osa, ja poista kommenteista tämä:
+         
+         MoveToFront.transform(args[1], temp.getName());
+         HuffmanEncoding.encode(temp.getName(), args[2]);
+        
+         Pahoittelut epäkäytännöllisyydestä, tämä johtuu siitä etten vielä ehtinyt toteuttaa BWT:n purkua, mutta halusin testailla pakkaustehokkuutta.
+        
+         */
         long finishTime = System.nanoTime();
         System.out.println("Compression finished. Total time: " + (finishTime - startTime) * 1.0e-9 + " sec.");
-        System.out.println("File size reduced from "+input.length() + " bytes to "+output.length()+" bytes ("+String.format("%.1f", 100.0*output.length()/input.length())+"% of original size).");
+        System.out.println("File size reduced from " + input.length() + " bytes to " + output.length() + " bytes (" + String.format("%.1f", 100.0 * output.length() / input.length()) + "% of original size).");
     }
 
     private static void printInstructionsAndQuit() {
