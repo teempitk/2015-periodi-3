@@ -51,19 +51,18 @@ public class Main {
     }
 
     private static void compress(String[] args) throws IOException {
-        System.out.println("Compression started.");
-        BurrowsWheeler.transform(args[1], temp2.getName());
-        MoveToFront.transform(temp2.getName(), temp.getName());
-        HuffmanEncoding.encode(temp.getName(), args[2]);
-        /*
-         Jos haluat kokeilla pakkausta, jonka voi purkaa, kommentoi tämän metodin ylläoleva osa, ja poista kommenteista tämä:
+//        System.out.println("Compression started.");
+//        BurrowsWheeler.transform(args[1], temp2.getName());
+//        MoveToFront.transform(temp2.getName(), temp.getName());
+//        HuffmanEncoding.encode(temp.getName(), args[2]);
+        
+         //Jos haluat kokeilla pakkausta, jonka voi purkaa, kommentoi tämän metodin ylläoleva osa, ja poista kommenteista tämä:
          
          MoveToFront.transform(args[1], temp.getName());
          HuffmanEncoding.encode(temp.getName(), args[2]);
         
-         Pahoittelut epäkäytännöllisyydestä, tämä johtuu siitä etten vielä ehtinyt toteuttaa BWT:n purkua, mutta halusin testailla pakkaustehokkuutta.
+         //Pahoittelut epäkäytännöllisyydestä, tämä johtuu siitä etten vielä ehtinyt toteuttaa BWT:n purkua, mutta halusin testailla pakkaustehokkuutta.
         
-         */
         long finishTime = System.nanoTime();
         System.out.println("Compression finished. Total time: " + (finishTime - startTime) * 1.0e-9 + " sec.");
         System.out.println("File size reduced from " + input.length() + " bytes to " + output.length() + " bytes (" + String.format("%.1f", 100.0 * output.length() / input.length()) + "% of original size).");

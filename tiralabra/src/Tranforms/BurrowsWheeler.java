@@ -19,8 +19,6 @@ public class BurrowsWheeler {
 
     private static int[] lines;
 
-    private static int stringLength;
-
     /*
     Metodi paikalliseen pikatestailuun
     */
@@ -54,13 +52,17 @@ public class BurrowsWheeler {
         data = Files.readAllBytes(pathToOriginalData);
         byte[] transformedData = new byte[data.length];
         lines = new int[data.length];
+        int lastByteInOriginalDataPointer;
         for(int i=0; i<data.length; i++){
             lines[i]=i;
         }
-        stringLength = data.length;
         lines = quickSortLines(lines, 0);
         for (int i = 0; i < data.length; i++) {
-            transformedData[i] = data[lines[(i - 1 + data.length) % data.length]];
+            //transformedData[i] = data[lines[(i - 1 + data.length) % data.length]]; //LUULTAVASTI VIRHEEN SYY
+            transformedData[i] = data[(lines[i]-1+data.length)%data.length];
+            if(lines[i]==0){
+                lastByteInOriginalDataPointer = i;
+            }
         }
         FileOutputStream outStream = new FileOutputStream(new File(outputFile));
         outStream.write(transformedData);
@@ -75,7 +77,7 @@ public class BurrowsWheeler {
      * @return Indices representing the alphabetic order of strings
      */
     public static int[] quickSortLines(int[] strings, int lcp) {
-        if (strings.length <= 1 || lcp == stringLength) {
+        if (strings.length <= 1 || lcp == data.length) {
             return strings;
         }
         int pivot = strings[0];
