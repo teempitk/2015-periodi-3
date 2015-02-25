@@ -33,32 +33,6 @@ public class BurrowsWheeler {
      */
     private static int[] lines;
 
-    /*
-     Metodi paikalliseen pikatestailuun
-     */
-    //  public static void main(String[] args) throws IOException {
-    //     transform("sampleFiles/abc.txt","sampleFiles/bbb.txt");
-//        byte A = (byte) 'A';
-//        byte B = (byte) 'B';
-//        byte C = (byte) 'C';
-//        data = new byte[6];
-//        data[0] = B;
-//        data[1] = A;
-//        data[2] = C;
-//        data[3] = B;
-//        data[4] = A;
-//        data[5] = B;
-//        stringLength = 6;
-//        lines = new int[6];
-//        for (int i = 0; i < 6; i++) {
-//            lines[i] = i;
-//        }
-//        int[] res = quickSortLines(lines, 0);
-//        for (int i = 0; i < res.length; i++) {
-//            System.out.print(res[i] + ", ");
-//        }
-    // oikea tulos : 4,1,3,0,5,2
-    //  }
     public static void transform(String inputFile, String outputFile) throws IOException {
         readInputData(inputFile);
         byte[] transformedData = new byte[data.length];
@@ -197,7 +171,7 @@ public class BurrowsWheeler {
         byte[] originalData = new byte[data.length];
         int indexOfCurr = indexOfLastCharInOriginalData;
         for (int i = 0; i < data.length; i++) {
-            originalData[data.length - i - 1] = data[indexOfCurr];
+            originalData[(data.length - 1 + i) % data.length] = data[indexOfCurr];
             indexOfCurr = previousLetters[indexOfCurr];
         }
 
