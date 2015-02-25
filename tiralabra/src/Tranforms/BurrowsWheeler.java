@@ -1,5 +1,6 @@
 package Tranforms;
 
+import Utils.BitConversions;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -62,7 +63,7 @@ public class BurrowsWheeler {
         readInputData(inputFile);
         byte[] transformedData = new byte[data.length];
         lines = new int[data.length];
-        int lastByteInOriginalDataPointer;
+        int lastByteInOriginalDataPointer = 0;
         for (int i = 0; i < data.length; i++) {
             lines[i] = i;
         }
@@ -74,6 +75,7 @@ public class BurrowsWheeler {
             }
         }
         FileOutputStream outStream = new FileOutputStream(new File(outputFile));
+        outStream.write(BitConversions.intToByteArray(lastByteInOriginalDataPointer));
         outStream.write(transformedData);
         outStream.close();
     }
@@ -157,10 +159,8 @@ public class BurrowsWheeler {
     }
 
     public static void inverseTransform(String inputFile, String outputFile) throws IOException {
-        
-        int indexOfLastCharInOriginalData = readIndexOfLast();
-        
         readInputData(inputFile);
+        int indexOfLastCharInOriginalData = readIndexOfLast();
         byte[] sorted = Arrays.copyOf(data, data.length);
         Arrays.sort(sorted);
 
@@ -192,24 +192,29 @@ public class BurrowsWheeler {
             previousLetters[i] = list.getFirst();
             list.remove();
         }
-        
+
         // Sitten vain luetaan alkuperäinen data edellä luodun taulukon avulla
-        byte [] originalData = new byte[data.length];
+        byte[] originalData = new byte[data.length];
         int indexOfCurr = indexOfLastCharInOriginalData;
-        for (int i=0; i<data.length; i++){
-            originalData[data.length-i]=data[indexOfCurr];
+        for (int i = 0; i < data.length; i++) {
+            originalData[data.length - i - 1] = data[indexOfCurr];
             indexOfCurr = previousLetters[indexOfCurr];
         }
-        
+
         FileOutputStream outStream = new FileOutputStream(new File(outputFile));
         outStream.write(originalData);
         outStream.close();
-        
-        
-        
+
     }
 
     private static int readIndexOfLast() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        byte[] numberAsByteArray = {data[0], data[1], data[2], data[3]};
+        int number = BitConversions.byteArrayToInt(numberAsByteArray);
+        byte[] newData = new byte[data.length - 4];
+        for (int i = 0; i < newData.length; i++) {
+            newData[i]=data[i+4];
+        }
+        data=newData;
+        return number;
     }
 }

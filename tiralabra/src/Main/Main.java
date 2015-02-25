@@ -43,23 +43,28 @@ public class Main {
     private static void decompress(String[] args) throws IOException {
         System.out.println("Decompression started.");
 
-        HuffmanDecoding.decode(args[1], temp.getName());
-        MoveToFront.reverseTransform(temp.getName(), args[2]);
+//        HuffmanDecoding.decode(args[1], temp.getName());
+//        MoveToFront.reverseTransform(temp.getName(), args[2]);
 
+        
+        HuffmanDecoding.decode(args[1], temp.getName());
+        MoveToFront.reverseTransform(temp.getName(), temp2.getName());
+        BurrowsWheeler.inverseTransform(temp2.getName(), args[2]);
+        
         long finishTime = System.nanoTime();
         System.out.println("Decompression finished. Total time: " + (finishTime - startTime) * 1.0e-9 + " sec.");
     }
 
     private static void compress(String[] args) throws IOException {
-//        System.out.println("Compression started.");
-//        BurrowsWheeler.transform(args[1], temp2.getName());
-//        MoveToFront.transform(temp2.getName(), temp.getName());
-//        HuffmanEncoding.encode(temp.getName(), args[2]);
+        System.out.println("Compression started.");
+        BurrowsWheeler.transform(args[1], temp2.getName());
+        MoveToFront.transform(temp2.getName(), temp.getName());
+        HuffmanEncoding.encode(temp.getName(), args[2]);
         
          //Jos haluat kokeilla pakkausta, jonka voi purkaa, kommentoi tämän metodin ylläoleva osa, ja poista kommenteista tämä:
          
-         MoveToFront.transform(args[1], temp.getName());
-         HuffmanEncoding.encode(temp.getName(), args[2]);
+//         MoveToFront.transform(args[1], temp.getName());
+//         HuffmanEncoding.encode(temp.getName(), args[2]);
         
          //Pahoittelut epäkäytännöllisyydestä, tämä johtuu siitä etten vielä ehtinyt toteuttaa BWT:n purkua, mutta halusin testailla pakkaustehokkuutta.
         
