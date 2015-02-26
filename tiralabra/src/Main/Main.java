@@ -6,6 +6,7 @@ import Tranforms.BurrowsWheeler;
 import Tranforms.MoveToFront;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class Main {
 
@@ -23,7 +24,10 @@ public class Main {
         temp = new File("RemovableTemporaryFileForCompressionIntermediateResults");
         temp2 = new File("RemovableTemporaryFileForCompressionIntermediateResults2");
 
-        if (args.length != 3) {
+        if (args.length == 2) {
+            args = Arrays.copyOf(args, args.length+1);
+            args[2]=args[1]+".teemuzip";
+        } else if (args.length != 3) {
             printInstructionsAndQuit();
         }
         input = new File(args[1]);
@@ -42,15 +46,10 @@ public class Main {
 
     private static void decompress(String[] args) throws IOException {
         System.out.println("Decompression started.");
-
-//        HuffmanDecoding.decode(args[1], temp.getName());
-//        MoveToFront.reverseTransform(temp.getName(), args[2]);
-
-        
         HuffmanDecoding.decode(args[1], temp.getName());
         MoveToFront.reverseTransform(temp.getName(), temp2.getName());
         BurrowsWheeler.inverseTransform(temp2.getName(), args[2]);
-        
+
         long finishTime = System.nanoTime();
         System.out.println("Decompression finished. Total time: " + (finishTime - startTime) * 1.0e-9 + " sec.");
     }
@@ -60,14 +59,7 @@ public class Main {
         BurrowsWheeler.transform(args[1], temp2.getName());
         MoveToFront.transform(temp2.getName(), temp.getName());
         HuffmanEncoding.encode(temp.getName(), args[2]);
-        
-         //Jos haluat kokeilla pakkausta, jonka voi purkaa, kommentoi tämän metodin ylläoleva osa, ja poista kommenteista tämä:
-         
-//         MoveToFront.transform(args[1], temp.getName());
-//         HuffmanEncoding.encode(temp.getName(), args[2]);
-        
-         //Pahoittelut epäkäytännöllisyydestä, tämä johtuu siitä etten vielä ehtinyt toteuttaa BWT:n purkua, mutta halusin testailla pakkaustehokkuutta.
-        
+
         long finishTime = System.nanoTime();
         System.out.println("Compression finished. Total time: " + (finishTime - startTime) * 1.0e-9 + " sec.");
         System.out.println("File size reduced from " + input.length() + " bytes to " + output.length() + " bytes (" + String.format("%.1f", 100.0 * output.length() / input.length()) + "% of original size).");
@@ -75,9 +67,9 @@ public class Main {
 
     private static void printInstructionsAndQuit() {
         System.out.println("Incorrect input arguments. To compress, use:\n\n"
-                + "> java Main c FileToCompress NameOfCompressedFile \n\n"
+                + "> java -jar tiralabra.jar c FileToCompress (NameOfCompressedFile) \n\n"
                 + "and to decompress:\n\n"
-                + "> java Main d NameOfCompressedFile NameOfDecompressedFile");
+                + "> java -jar tiralabra.jar d NameOfCompressedFile NameOfDecompressedFile");
         System.exit(0);
     }
 }

@@ -1,14 +1,14 @@
 # tiralabra
 
-Toteutan projektissa tiedostoja pakkaavan ohjelman. Tällä erää pakkaus pohjautuu pelkästään Huffman-koodaukseen, eikä ole mainittavan tehokas muihin kuin tekstitiedostoihin.
+Toteutan tietorakenteiden ja algoritmien harjoitustyönä pakkausohjelmaa. Projektin jar-tiedosto löytyy tiralabra/dist -hakemistosta, ja sen ajaminen onnistuu seuraavilla käskyillä:
 
-Pääohjelma Main/Main.java on asetettu tällä hetkellä pakkaamaan/purkamaan pelkästään sampleFiles-kansion testitiedostoja. Sopivat rivit pois kommentoimalla ajamista voi kokeilla tietenkin myös muille tiedostoille. Pakkaus ja purku onnistuvat käskyillä:
+> java -jar tiralabra.jar c pakattavaTiedosto (pakatunTiedostonNimi)
 
-java Main c pakattavaTiedosto pakatunTiedostonNimi
+> java -jar tiralabra.jar d purettavaTiedosto puretunTiedostonNimi
 
-java Main d purettavaTiedosto puretunTiedostonNimi
+Parametri c tarkoittaa pakkaamista (compress) ja d purkua (decompress). Ohjelman pakkauspino on kolmitasoinen: 1. Burrows-Wheeler -muunnos 2. Move to Front -muunnos 3. Huffman-koodaus. Kaikki käytetyt menetelmät ovat myös ihan ”oikeassa” käytössä, ja nämä kolme esiintyvät mm. osana bzip2:n kompressiopinoa.
 
-Lähdekoodi on jaettu paketteihin seuraavasti:
+Lähdekoodi löytyy hakemistosta tiralabra/src. Koodi on jaettu pakkauksiin seuraavasti:
 
 Main: Pääohjelma
 
@@ -17,3 +17,7 @@ Utils: Yleishyödyllisiä metodeita (lähinnä bittien muunnoksia merkkijonoiksi
 Huffman: Huffman-koodauksen osat
 
 DataStructures: Koodauksessa käytettäviä tietorakenteita.
+
+Transforms: MTF- ja BWT-muunnokset.
+
+IO: Bittitason tiedoston lukuun ja kirjoitukseen käytettäviä luokkia.
