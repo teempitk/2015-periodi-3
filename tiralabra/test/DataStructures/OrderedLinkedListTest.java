@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
  */
 public class OrderedLinkedListTest {
 
-    private OrderedLinkedList list;
+    private DynamicList list;
 
     public OrderedLinkedListTest() {
     }
@@ -35,7 +35,7 @@ public class OrderedLinkedListTest {
 
     @Before
     public void setUp() {
-        list = new OrderedLinkedList();
+        list = new DynamicList();
     }
 
     @After

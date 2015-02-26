@@ -1,6 +1,6 @@
 package Huffman;
 
-import DataStructures.OrderedLinkedList;
+import DataStructures.DynamicList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -56,7 +56,7 @@ public class HuffmanTree {
      * tekstissä.
      */
     private static void generateTree(int[] frequencyTable) {
-        OrderedLinkedList list = new OrderedLinkedList();
+        DynamicList list = new DynamicList();
         for (int i = 0; i < frequencyTable.length; i++) {
             if (frequencyTable[i] > 0) {
                 HuffmanNode newnode = new HuffmanNode((char) i, frequencyTable[i]);

@@ -64,7 +64,8 @@ public class BurrowsWheeler {
      * @throws IOException
      */
     public static void transform(String inputFile, String outputFile) throws IOException {
-        System.out.println("Burrows-Wheeler transform started");
+        System.out.println("Burrows-Wheeler transform started.");
+        long BWTStartTime = System.nanoTime();
         data = Files.readAllBytes(Paths.get(inputFile));
         byte[] transformedData = new byte[data.length];
         int lastByteInOriginalDataPointer = 0;
@@ -83,7 +84,7 @@ public class BurrowsWheeler {
         outStream.write(BitConversions.intToByteArray(lastByteInOriginalDataPointer));
         outStream.write(transformedData);
         outStream.close();
-        System.out.println("Burrows-Wheeler transform finished.");
+        System.out.println("Burrows-Wheeler transform finished. Total time: "+(System.nanoTime()-BWTStartTime)*1.0e-9+" sec");
     }
 
     /**
@@ -184,11 +185,20 @@ public class BurrowsWheeler {
      * @throws IOException
      */
     public static void inverseTransform(String inputFile, String outputFile) throws IOException {
+        System.out.println("Burrows-Wheeler inverse transform started.");
+        long inverseBWTStartTime = System.nanoTime();
+                
+        System.out.print("Phase 1/4. Generating first and last column ... ");
+        long columnsStartTime = System.nanoTime();
         data = Files.readAllBytes(Paths.get(inputFile));
         int indexOfLastCharInOriginalData = readIndexOfLastFromTheBeginningOfData();
         byte[] sorted = Arrays.copyOf(data, data.length);
         quickSort(sorted, 0, sorted.length - 1);
+        System.out.println(" "
+                + "Finished. Time: " + String.format("%.3f", (System.nanoTime() - columnsStartTime) * 1.0e-9) + " sec");
 
+        System.out.print("Phase 2/4. Indexing byte occurrences ... ");
+        long indexingStartTime = System.nanoTime();
         LinkedList<Integer>[] arr = new LinkedList[256];
         for (int i = 0; i < data.length; i++) {
             byte b = data[i];
@@ -203,7 +213,10 @@ public class BurrowsWheeler {
             }
             list.addLast(i);
         }
+        System.out.println("\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - indexingStartTime) * 1.0e-9) + " sec");
 
+        System.out.print("Phase 3/4. Combining pairs of bytes ... ");
+        long pairsStartTime = System.nanoTime();
         int[] followingLetters = new int[data.length];
         for (int i = 0; i < sorted.length; i++) {
             byte b = sorted[i];
@@ -215,7 +228,10 @@ public class BurrowsWheeler {
             followingLetters[i] = list.getFirst();
             list.remove();
         }
-
+        System.out.println("\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - pairsStartTime) * 1.0e-9) + " sec");
+        
+        System.out.print("Phase 4/4. Linking pairs to get complete data ...");
+        long dataGenerationStartTime = System.nanoTime();
         byte[] originalData = new byte[data.length];
         int indexOfCurr = indexOfLastCharInOriginalData;
         for (int i = 0; i < data.length; i++) {
@@ -226,7 +242,8 @@ public class BurrowsWheeler {
         FileOutputStream outStream = new FileOutputStream(new File(outputFile));
         outStream.write(originalData);
         outStream.close();
-
+        System.out.println("Finished. Time: " + String.format("%.3f", (System.nanoTime() - dataGenerationStartTime) * 1.0e-9) + " sec");
+        System.out.println("Burrows-Wheeler inverse transform finished. Total time: "+(System.nanoTime()-inverseBWTStartTime)*1.0e-9+" sec");
     }
 
     /**
@@ -271,7 +288,7 @@ public class BurrowsWheeler {
      * @param arr Ositettava taulukko.
      * @param left Ositettavan osan vasen raja.
      * @param right Ositettavan osan oikea raja.
-     * @return
+     * @return indeksi, johon jako-alkio sijoittui.
      */
     private static int partition(byte[] arr, int left, int right) {
         byte pivot = arr[left];
