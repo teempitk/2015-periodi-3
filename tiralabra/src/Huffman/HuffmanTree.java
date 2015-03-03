@@ -1,11 +1,7 @@
 package Huffman;
 
-import DataStructures.DynamicList;
 import DataStructures.MyLinkedList;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 /**
  * HuffmanTree-luokan tarkoitus on tarjota merkkikohtaiset koodisanat luova
@@ -59,7 +55,7 @@ public class HuffmanTree {
      */
     private static void generateTree(int[] frequencyTable) {
         HuffmanNodeComparator comparator = new HuffmanNodeComparator();
-        MyLinkedList list = new MyLinkedList();
+        MyLinkedList<HuffmanNode> list = new MyLinkedList();
         for (int i = 0; i < frequencyTable.length; i++) {
             if (frequencyTable[i] > 0) {
                 HuffmanNode newnode = new HuffmanNode((char) i, frequencyTable[i]);
@@ -69,7 +65,7 @@ public class HuffmanTree {
             }
         }
         while (list.size() >= 2) {
-            root = new HuffmanNode((HuffmanNode)list.getAndRemoveFirst(), (HuffmanNode)list.getAndRemoveFirst());
+            root = new HuffmanNode(list.getAndRemoveFirst(),list.getAndRemoveFirst());
             list.addPreservingOrder(root,comparator);
         }
         root = (HuffmanNode)list.getFirst();
@@ -101,12 +97,9 @@ public class HuffmanTree {
     }
 
     private static class HuffmanNodeComparator implements Comparator<HuffmanNode> {
-
         @Override
         public int compare(HuffmanNode o1, HuffmanNode o2) {
             return o1.compareTo(o2);
         }
-
     }
-
 }

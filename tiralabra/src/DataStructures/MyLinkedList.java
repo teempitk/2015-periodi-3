@@ -26,6 +26,17 @@ public class MyLinkedList< E> {
      */
     private ListEntry last;
 
+    public MyLinkedList(){
+        size=0;
+        first=null;
+        last=null;
+    }
+    
+    /**
+     * Metodi lisää parametrina annetun arvon listan ensimmäiseksi. 
+     *
+     * @param val Listaan lisättävä arvo.
+     */
     public void addFirst(E val) {
         ListEntry entry = new ListEntry(val);
         entry.next = first;
@@ -38,6 +49,11 @@ public class MyLinkedList< E> {
         size++;
     }
 
+    /**
+     * Metodi lisää parametrina annetun arvon listan loppuun.
+     *
+     * @param val Listaan lisättävä arvo.
+     */
     public void addLast(E val) {
         ListEntry entry = new ListEntry(val);
         entry.prev = last;
@@ -50,11 +66,23 @@ public class MyLinkedList< E> {
         size++;
     }
 
+    /**
+     * Palauttaa listan ensimmäisenä olevan arvon, muttei poista sitä listasta.
+     *
+     * @return Listan ensimmäinen arvo.
+     */
     public E getFirst() {
         return (E) first.val;
     }
 
-    public E getElementAtIndex(int index) {
+    /**
+     * Palauttaa listan annetussa indeksissä olevan arvon.
+     *
+     * @param index Indeksi, jossa oleva arvo halutaan. Jos indeksi ei kelpaa,
+     * palauttaa null.
+     * @return
+     */
+    public E getElementAtIndex(int index) { // POSSIBLE FAIL------------------------
         ListEntry entry = entryAtIndex(index);
         if (entry == null) {
             return null;
@@ -62,7 +90,14 @@ public class MyLinkedList< E> {
         return (E) entry.val;
     }
 
-    private ListEntry entryAtIndex(int index) {
+    /**
+     * Luokan sisäisessä käytössä oleva metodi, johon muutama julkinen metodi
+     * pohjautuu. Palauttaa ListEntryn indeksin perusteella.
+     *
+     * @param index Halutun ListEntryn indeksi.
+     * @return Indeksissä oleva ListEntry.
+     */
+    private ListEntry entryAtIndex(int index) { // POSSIBLE FAIL------------------------
         if (index >= 0 && index < size) {
             ListEntry curr = first;
             for (int i = 0; i < index; i++) {
@@ -74,13 +109,24 @@ public class MyLinkedList< E> {
         }
     }
 
+    /**
+     * Listan ensimmäisen alkion palauttava ja poistava metodi.
+     *
+     * @return Listan ensimmäinen alkio.
+     */
     public E getAndRemoveFirst() {
         E val = getFirst();
         removeFirst();
         return val;
     }
 
-    public int indexOf(E val) {
+    /**
+     * Etsii listasta parametrina annetun alkion, ja palauttaa sen indeksin.
+     *
+     * @param val Arvo, jota listasta etsitään.
+     * @return Parametrina annetun arvon indeksi, -1 jos arvoa ei löydy.
+     */
+    public int indexOf(E val) { // POSSIBLE FAIL------------------------------------------------
         if (size == 0) {
             return -1;
         }
@@ -98,6 +144,9 @@ public class MyLinkedList< E> {
 
     }
 
+    /**
+     * Metodi poistaa listan ensimmäisen arvon.
+     */
     public void removeFirst() {
         if (size > 0) {
             first = first.next;
@@ -105,7 +154,12 @@ public class MyLinkedList< E> {
         size--;
     }
 
-    public void removeAtIndex(int index) {
+    /**
+     * Poistaa listasta alkion parametrina annetusta indeksistä.
+     *
+     * @param index Poistettavan arvon indeksi.
+     */
+    public void removeAtIndex(int index) { // POSSIBLE FAIL------------------------------------------------
         ListEntry entry = entryAtIndex(index);
         if (entry != null) {
             if (entry.prev != null) {
@@ -118,6 +172,14 @@ public class MyLinkedList< E> {
         }
     }
 
+    /**
+     * Lisää listaan alkion siten, että jos lista on ennen lisäystä kasvavassa
+     * suuruusjärjestyksessä, järjestys säilyy. Metodia käytetään Huffman-puuta
+     * rakentaessa.
+     *
+     * @param val Listaan lisättävä arvo
+     * @param comp Lisättävien arvojen vertailuun kelpaava comparator
+     */
     public void addPreservingOrder(E val, Comparator<E> comp) {
         size++;
         ListEntry entry = new ListEntry(val);
@@ -128,6 +190,7 @@ public class MyLinkedList< E> {
         }
         if (comp.compare((E) first.val, val) > 0) {
             entry.next = first;
+            first.prev = entry;
             first = entry;
             return;
         }
@@ -137,16 +200,26 @@ public class MyLinkedList< E> {
         }
         entry.next = curr.next;
         entry.prev = curr;
-        if(curr.next!=null){
-            curr.next.prev=entry;
+        if (curr.next != null) {
+            curr.next.prev = entry;
         }
         curr.next = entry;
     }
-    
+
+    /**
+     * Palauttaa listassa olevien alkioiden lukumäärän.
+     *
+     * @return alkioiden lukumäärä.
+     */
     public int size() {
         return size;
     }
 
+    /**
+     * Listaan lisättäviä alkioita kuvaava privaatti luokka.
+     *
+     * @param <E> Lisättävien alkioiden tyyppi (sama kuin koko listalla).
+     */
     private class ListEntry<E> {
 
         private final E val;
