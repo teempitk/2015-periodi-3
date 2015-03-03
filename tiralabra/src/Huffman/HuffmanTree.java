@@ -1,8 +1,10 @@
 package Huffman;
 
 import DataStructures.DynamicList;
+import DataStructures.MyLinkedList;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -56,20 +58,21 @@ public class HuffmanTree {
      * tekstissä.
      */
     private static void generateTree(int[] frequencyTable) {
-        DynamicList list = new DynamicList();
+        HuffmanNodeComparator comparator = new HuffmanNodeComparator();
+        MyLinkedList list = new MyLinkedList();
         for (int i = 0; i < frequencyTable.length; i++) {
             if (frequencyTable[i] > 0) {
                 HuffmanNode newnode = new HuffmanNode((char) i, frequencyTable[i]);
-                list.insert(newnode);
+                list.addPreservingOrder(newnode,comparator);
             } else {
                 codewords[frequencyTable[i]] = null;
             }
         }
         while (list.size() >= 2) {
-            root = new HuffmanNode(list.removeSmallest(), list.removeSmallest());
-            list.insert(root);
+            root = new HuffmanNode((HuffmanNode)list.getAndRemoveFirst(), (HuffmanNode)list.getAndRemoveFirst());
+            list.addPreservingOrder(root,comparator);
         }
-        root = list.removeSmallest();
+        root = (HuffmanNode)list.getFirst();
     }
 
     /**
@@ -95,6 +98,15 @@ public class HuffmanTree {
                 codewords[node.getSymbol()] = prefix;
             }
         }
+    }
+
+    private static class HuffmanNodeComparator implements Comparator<HuffmanNode> {
+
+        @Override
+        public int compare(HuffmanNode o1, HuffmanNode o2) {
+            return o1.compareTo(o2);
+        }
+
     }
 
 }

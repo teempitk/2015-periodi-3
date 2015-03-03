@@ -1,5 +1,6 @@
 package Tranforms;
 
+import DataStructures.MyLinkedList;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class MoveToFront {
      * byteList sisältää kaikki mahdolliset tavut siinä järjestyksessä, mikä
      * niistä on esiintyntyt lähdetiedostossa viimeksi.
      */
-    private static List<Byte> byteList;
+    private static MyLinkedList<Byte> byteList;
     /**
      * Sisältää pakattavan tiedoston bytearrayna
      */
@@ -82,9 +83,9 @@ public class MoveToFront {
      * Alustaa byteListin, tällä hetkellä mielivaltaiseen järjestykseen.
      */
     private static void initializeByteList() {
-        byteList = new LinkedList<>();
+        byteList = new MyLinkedList<>();
         for (int i = -128; i < 128; i++) {
-            byteList.add((byte) i);
+            byteList.addLast((byte) i);
         }
     }
 
@@ -98,8 +99,8 @@ public class MoveToFront {
      */
     private static int mtf(byte b) {
         int index = byteList.indexOf(b);
-        byteList.remove(index);
-        byteList.add(0, b);
+        byteList.removeAtIndex(index);
+        byteList.addFirst(b);
         return index - 128;
     }
 
@@ -110,9 +111,9 @@ public class MoveToFront {
      * @param index Indeksi, jossa oleva alkio siirretään listan alkuun.
      */
     private static void mtf(int index) {
-        byte b = byteList.get(index);
-        byteList.remove(index);
-        byteList.add(0, b);
+        byte b = byteList.getElementAtIndex(index);
+        byteList.removeAtIndex(index);
+        byteList.addFirst(b);
     }
 
     /**
@@ -134,7 +135,7 @@ public class MoveToFront {
         System.out.print("Phase 2/2. Replacing bytes with indices ... ");
         long replacingStartTime = System.nanoTime();
         for (int i = 0; i < data.length; i++) {
-            fstream.write(byteList.get(data[i] + 128));
+            fstream.write(byteList.getElementAtIndex(data[i] + 128));
             mtf(data[i] + 128);
         }
         fstream.close();

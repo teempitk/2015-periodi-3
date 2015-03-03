@@ -1,5 +1,6 @@
 package Tranforms;
 
+import DataStructures.MyLinkedList;
 import Utils.BitConversions;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -7,8 +8,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.LinkedList;
-
 /**
  * Burrows-Wheeler -muunnos ei ole varsinainen pakkausmenetelmä, vaan muunnos,
  * joka tehostaa muiden pakkausmenetelmien toimintaa. BWT:n ideasta saa hyvän
@@ -199,16 +198,16 @@ public class BurrowsWheeler {
 
         System.out.print("Phase 2/4. Indexing byte occurrences ... ");
         long indexingStartTime = System.nanoTime();
-        LinkedList<Integer>[] arr = new LinkedList[256];
+        MyLinkedList<Integer>[] arr = new MyLinkedList[256];
         for (int i = 0; i < data.length; i++) {
             byte b = data[i];
             int index = b;
             if (index < 0) {
                 index += 256;
             }
-            LinkedList list = arr[index];
+            MyLinkedList list = arr[index];
             if (list == null) {
-                list = new LinkedList();
+                list = new MyLinkedList();
                 arr[index] = list;
             }
             list.addLast(i);
@@ -224,9 +223,9 @@ public class BurrowsWheeler {
             if (index < 0) {
                 index += 256;
             }
-            LinkedList<Integer> list = arr[index];
+            MyLinkedList<Integer> list = arr[index];
             followingLetters[i] = list.getFirst();
-            list.remove();
+            list.removeFirst();
         }
         System.out.println("\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - pairsStartTime) * 1.0e-9) + " sec");
         
