@@ -2,12 +2,14 @@ package Tranforms;
 
 import DataStructures.MyLinkedList;
 import Utils.BitConversions;
+import Utils.ArrayUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+
 /**
  * Burrows-Wheeler -muunnos ei ole varsinainen pakkausmenetelmä, vaan muunnos,
  * joka tehostaa muiden pakkausmenetelmien toimintaa. BWT:n ideasta saa hyvän
@@ -83,7 +85,7 @@ public class BurrowsWheeler {
         outStream.write(BitConversions.intToByteArray(lastByteInOriginalDataPointer));
         outStream.write(transformedData);
         outStream.close();
-        System.out.println("Burrows-Wheeler transform finished. Total time: "+(System.nanoTime()-BWTStartTime)*1.0e-9+" sec");
+        System.out.println("Burrows-Wheeler transform finished. Total time: " + (System.nanoTime() - BWTStartTime) * 1.0e-9 + " sec");
     }
 
     /**
@@ -186,13 +188,13 @@ public class BurrowsWheeler {
     public static void inverseTransform(String inputFile, String outputFile) throws IOException {
         System.out.println("Burrows-Wheeler inverse transform started.");
         long inverseBWTStartTime = System.nanoTime();
-                
+
         System.out.print("Phase 1/4. Generating first and last column ... ");
         long columnsStartTime = System.nanoTime();
         data = Files.readAllBytes(Paths.get(inputFile));
         int indexOfLastCharInOriginalData = readIndexOfLastFromTheBeginningOfData();
         byte[] sorted = Arrays.copyOf(data, data.length);
-        quickSort(sorted, 0, sorted.length - 1);
+        ArrayUtils.quickSort(sorted, 0, sorted.length - 1);
         System.out.println(" "
                 + "Finished. Time: " + String.format("%.3f", (System.nanoTime() - columnsStartTime) * 1.0e-9) + " sec");
 
@@ -228,7 +230,7 @@ public class BurrowsWheeler {
             list.removeFirst();
         }
         System.out.println("\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - pairsStartTime) * 1.0e-9) + " sec");
-        
+
         System.out.print("Phase 4/4. Linking pairs to get complete data ...");
         long dataGenerationStartTime = System.nanoTime();
         byte[] originalData = new byte[data.length];
@@ -242,7 +244,7 @@ public class BurrowsWheeler {
         outStream.write(originalData);
         outStream.close();
         System.out.println("Finished. Time: " + String.format("%.3f", (System.nanoTime() - dataGenerationStartTime) * 1.0e-9) + " sec");
-        System.out.println("Burrows-Wheeler inverse transform finished. Total time: "+(System.nanoTime()-inverseBWTStartTime)*1.0e-9+" sec");
+        System.out.println("Burrows-Wheeler inverse transform finished. Total time: " + (System.nanoTime() - inverseBWTStartTime) * 1.0e-9 + " sec");
     }
 
     /**
@@ -264,48 +266,4 @@ public class BurrowsWheeler {
         return number;
     }
 
-    /**
-     * Quicksort, jonka avulla saadaan muunnoksen purkamisessa "matriisin
-     * ensimmäinen sarake" järjestämällä viimeinen.
-     *
-     * @param arr Järjestettävä taulukko.
-     * @param left Järjestettävän osan vasen raja.
-     * @param right Järjestettävän osan oikea raja.
-     */
-    private static void quickSort(byte[] arr, int left, int right) {
-        if (left < right) {
-            int pivot = partition(arr, left, right);
-            quickSort(arr, left, pivot);
-            quickSort(arr, pivot + 1, right);
-        }
-    }
-
-    /**
-     * Quicksortin tarvitsema ositusmetodi, joka siirtää pivotia pienemmät
-     * alkiot sen vasemmalle puolelle ja suuremmat oikealle.
-     *
-     * @param arr Ositettava taulukko.
-     * @param left Ositettavan osan vasen raja.
-     * @param right Ositettavan osan oikea raja.
-     * @return indeksi, johon jako-alkio sijoittui.
-     */
-    private static int partition(byte[] arr, int left, int right) {
-        byte pivot = arr[left];
-        int i = left - 1;
-        int j = right + 1;
-        while (i < j) {
-            do {
-                j--;
-            } while (arr[j] > pivot);
-            do {
-                i++;
-            } while (arr[i] < pivot);
-            if (i < j) {
-                byte tmp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = tmp;
-            }
-        }
-        return j;
-    }
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package DataStructures;
 
 import java.util.Comparator;
@@ -20,6 +15,7 @@ import static org.junit.Assert.*;
 public class MyLinkedListTest {
 
     private Comparator<Integer> comp = new Comparator<Integer>() {
+        @Override
         public int compare(Integer o1, Integer o2) {
             return o1.compareTo(o2);
         }
@@ -30,34 +26,45 @@ public class MyLinkedListTest {
     public MyLinkedListTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
     @Before
     public void setUp() {
         list = new MyLinkedList();
     }
 
-    @After
-    public void tearDown() {
-    }
-
-    
     @Test
     public void addingEntriesToStartIncreasesListSizeTest(){
-        list.addFirst(2);
+        list.addLast(3);
         assertEquals(1,list.size());
     }
     @Test
     public void addingEntriesToEndIncreasesListSizeTest(){
-        list.addFirst(2);
         list.addLast(3);
-        assertEquals(2,list.size());
+        assertEquals(1,list.size());
+    }
+    @Test
+    public void addingMultipleEntriesIncreasesSizeCorrectlyTest(){
+        list.addLast(3);
+        list.addLast(1);
+        list.addLast(2);
+        list.addLast(6);
+        list.addLast(2);
+        list.addLast(2);
+        assertEquals(6,list.size());
+    }
+    @Test
+    public void getFirstReturnsCorrectlyFromSizeOneListTest(){
+        list.addFirst(2);
+        assertEquals(2,list.getFirst());
+    }
+    @Test
+    public void getFirstReturnsCorrectlyFromBiggerListTest(){
+        list.addLast(3);
+        list.addFirst(1);
+        list.addLast(2);
+        list.addFirst(6);
+        list.addLast(2);
+        list.addLast(2);
+        assertEquals(6,list.getFirst());
     }
     @Test
     public void removingEntriesDecreasesSizeTest(){
@@ -65,6 +72,13 @@ public class MyLinkedListTest {
         list.addLast(3);
         list.removeFirst();
         assertEquals(1,list.size());
+    }
+    @Test
+    public void removingFirstRemovesTheFirstElement(){
+        list.addFirst(2);
+        list.addLast(3);
+        list.removeFirst();
+        assertEquals(3,list.getFirst());
     }
     @Test
     public void addingToListEndKeepsCorrectOrderTest(){
@@ -86,7 +100,34 @@ public class MyLinkedListTest {
             inorder[i]=(int)list.getAndRemoveFirst();
         }
         assertArrayEquals(correct,inorder);
-        
+    }
+    @Test
+    public void orderPreservingAdditionWorksTest2(){
+        list.addPreservingOrder(1,comp);
+        list.addPreservingOrder(1,comp);
+        list.addPreservingOrder(1,comp);
+        list.addPreservingOrder(1,comp);
+        list.addPreservingOrder(1,comp);
+        int[] inorder = new int[5];
+        int[] correct = {1, 1, 1, 1, 1};
+        for (int i=0;i<5;i++){
+            inorder[i]=(int)list.getAndRemoveFirst();
+        }
+        assertArrayEquals(correct,inorder);
+    }
+    @Test
+    public void orderPreservingAdditionWorksTest3(){
+        list.addPreservingOrder(1,comp);
+        list.addPreservingOrder(2,comp);
+        list.addPreservingOrder(3,comp);
+        list.addPreservingOrder(4,comp);
+        list.addPreservingOrder(5,comp);
+        int[] inorder = new int[5];
+        int[] correct = {1, 2, 3, 4, 5};
+        for (int i=0;i<5;i++){
+            inorder[i]=(int)list.getAndRemoveFirst();
+        }
+        assertArrayEquals(correct,inorder);
     }
     @Test
     public void indedxOfFindsCorrectIndexTest(){
@@ -140,6 +181,30 @@ public class MyLinkedListTest {
         for(int i=0;i<4; i++){
             assertEquals(correct[i],list.getAndRemoveFirst());
         }
+    }
+    @Test
+    public void gettingElementByIndexWorksTest(){
+        list.addLast(4);
+        list.addLast(3);
+        list.addLast(1);
+        list.addLast(5);
+        list.addLast(2);
+        assertEquals(5,list.getElementAtIndex(3));
+    }
+    @Test
+    public void indexOfReturnsMinusOneForMissingElemsTest(){
+        list.addLast(4);
+        list.addLast(3);
+        assertEquals(-1,list.indexOf(2));
+    }
+    @Test
+    public void removingFromNonExistentIndexDoesNothingTest(){
+        list.addLast(4);
+        list.addLast(3);
+        list.removeAtIndex(2);
+        assertEquals(2,list.size());
+        assertEquals(4,list.getAndRemoveFirst());
+        assertEquals(3,list.getAndRemoveFirst());
     }
 
 }

@@ -5,7 +5,7 @@ import java.util.Comparator;
 /**
  * Linkitetty lista, joka toteuttaa projektin vaatimat operaatiot. Erityistä
  * toteutukselle on Huffman-puun rakentamiseen käytettävät järjestettyä listaa
- * ylläpitävät metodit. Listalle on kolme käyttötarkoitusta: 1. Huffman-puun
+ * ylläpitävät metodit (addPreservingOrder lähinnä). Listalle on kolme käyttötarkoitusta: 1. Huffman-puun
  * solmujen tallennus puun rakennusvaiheessa. 2. MTF-muunnoksessa "bytelistin"
  * tallennus. 3. BWT:n purkuvaiheessa.
  *

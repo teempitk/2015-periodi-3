@@ -58,7 +58,7 @@ public class HuffmanTree {
         MyLinkedList<HuffmanNode> list = new MyLinkedList();
         for (int i = 0; i < frequencyTable.length; i++) {
             if (frequencyTable[i] > 0) {
-                HuffmanNode newnode = new HuffmanNode((char) i, frequencyTable[i]);
+                HuffmanNode newnode = new HuffmanNode(i, frequencyTable[i]);
                 list.addPreservingOrder(newnode,comparator);
             } else {
                 codewords[frequencyTable[i]] = null;
@@ -89,9 +89,9 @@ public class HuffmanTree {
             findCodewords(node.getRight(), prefix + "1");
         } else {
             if (prefix.equals("")) {
-                codewords[node.getSymbol()] = "0"; // Jos tekstissä vain yhtä samaa tavua, root on lehti
+                codewords[node.getByteValue()] = "0"; // Jos tekstissä vain yhtä samaa tavua, root on lehti
             } else {
-                codewords[node.getSymbol()] = prefix;
+                codewords[node.getByteValue()] = prefix;
             }
         }
     }

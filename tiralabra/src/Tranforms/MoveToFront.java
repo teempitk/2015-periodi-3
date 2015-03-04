@@ -6,8 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Move to front on pakkauksessa käytettävä menetelmä, joka ei varsinaisesti
@@ -84,15 +82,16 @@ public class MoveToFront {
      */
     private static void initializeByteList() {
         byteList = new MyLinkedList<>();
-        for (int i = -128; i < 128; i++) {
-            byteList.addLast((byte) i);
+        for (int i = 0; i < 256; i++) {
+            int b = i;
+            if(b>127)b-=256;
+            byteList.addLast((byte) b);
         }
     }
 
-
     /**
      * Metodi mtf hakee byteLististä tavun indeksin, ja siirttää sitten tavun
-     * listan kärkeen. Metodia käytetään muunnoksen tekemiseen pakakusvaiheessa.
+     * listan kärkeen. Metodia käytetään muunnoksen tekemiseen pakkausvaiheessa.
      *
      * @param b Listassa siirrettävä tavu
      * @return Siirretyn tavun indeksi ennen siirtoa
@@ -101,7 +100,10 @@ public class MoveToFront {
         int index = byteList.indexOf(b);
         byteList.removeAtIndex(index);
         byteList.addFirst(b);
-        return index - 128;
+        if (index > 127) {
+            index -= 256;
+        }
+        return index;
     }
 
     /**
@@ -131,17 +133,21 @@ public class MoveToFront {
         System.out.print("Phase 1/2. Initializing variables ... ");
         initializeVars(inputFile, outputFile);
         System.out.println("\t\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - initStartTime) * 1.0e-9) + " sec");
-        
+
         System.out.print("Phase 2/2. Replacing bytes with indices ... ");
         long replacingStartTime = System.nanoTime();
         for (int i = 0; i < data.length; i++) {
-            fstream.write(byteList.getElementAtIndex(data[i] + 128));
-            mtf(data[i] + 128);
+            int index = data[i];
+            if (index < 0) {
+                index += 256;
+            }
+            fstream.write(byteList.getElementAtIndex(index));
+            mtf(index);
         }
         fstream.close();
         System.out.println("\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - replacingStartTime) * 1.0e-9) + " sec");
 
         System.out.println("Move to front transform finished. Total time: " + (System.nanoTime() - mtfStartTime) * 1.0e-9 + " sec");
-    
+
     }
 }

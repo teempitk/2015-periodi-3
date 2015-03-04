@@ -26,7 +26,7 @@ public class HuffmanNodeTest {
 
     @Test
     public void LeafNodeConstructorSetsCharCorrectlyTest() {
-        assertEquals('a', leftChild.getSymbol());
+        assertEquals('a', leftChild.getByteValue());
     }
 
     @Test
