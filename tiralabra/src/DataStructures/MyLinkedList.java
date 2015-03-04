@@ -26,14 +26,14 @@ public class MyLinkedList< E> {
      */
     private ListEntry last;
 
-    public MyLinkedList(){
-        size=0;
-        first=null;
-        last=null;
+    public MyLinkedList() {
+        size = 0;
+        first = null;
+        last = null;
     }
-    
+
     /**
-     * Metodi lisää parametrina annetun arvon listan ensimmäiseksi. 
+     * Metodi lisää parametrina annetun arvon listan ensimmäiseksi.
      *
      * @param val Listaan lisättävä arvo.
      */
@@ -82,7 +82,7 @@ public class MyLinkedList< E> {
      * palauttaa null.
      * @return
      */
-    public E getElementAtIndex(int index) { // POSSIBLE FAIL------------------------
+    public E getElementAtIndex(int index) {
         ListEntry entry = entryAtIndex(index);
         if (entry == null) {
             return null;
@@ -97,7 +97,7 @@ public class MyLinkedList< E> {
      * @param index Halutun ListEntryn indeksi.
      * @return Indeksissä oleva ListEntry.
      */
-    private ListEntry entryAtIndex(int index) { // POSSIBLE FAIL------------------------
+    private ListEntry entryAtIndex(int index) {
         if (index >= 0 && index < size) {
             ListEntry curr = first;
             for (int i = 0; i < index; i++) {
@@ -126,13 +126,13 @@ public class MyLinkedList< E> {
      * @param val Arvo, jota listasta etsitään.
      * @return Parametrina annetun arvon indeksi, -1 jos arvoa ei löydy.
      */
-    public int indexOf(E val) { // POSSIBLE FAIL------------------------------------------------
+    public int indexOf(E val) {
         if (size == 0) {
             return -1;
         }
         ListEntry curr = first;
         int index = 0;
-        while (curr.next != null && val != curr.val) {
+        while (curr.next != null && curr.val != val) {
             curr = curr.next;
             index++;
         }
@@ -159,14 +159,18 @@ public class MyLinkedList< E> {
      *
      * @param index Poistettavan arvon indeksi.
      */
-    public void removeAtIndex(int index) { // POSSIBLE FAIL------------------------------------------------
+    public void removeAtIndex(int index) { 
         ListEntry entry = entryAtIndex(index);
         if (entry != null) {
             if (entry.prev != null) {
                 entry.prev.next = entry.next;
+            } else {
+                first = entry.next;
             }
             if (entry.next != null) {
                 entry.next.prev = entry.prev;
+            } else {
+                last = entry.prev;
             }
             size--;
         }

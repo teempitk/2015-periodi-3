@@ -88,4 +88,58 @@ public class MyLinkedListTest {
         assertArrayEquals(correct,inorder);
         
     }
+    @Test
+    public void indedxOfFindsCorrectIndexTest(){
+        list.addLast(4);
+        list.addLast(3);
+        list.addLast(1);
+        list.addLast(5);
+        list.addLast(2);
+        assertEquals(2,list.indexOf(1));
+    }
+    @Test
+    public void indedxOfFindsCorrectIndexTest2(){
+        list.addLast(4);
+        list.addLast(3);
+        list.addLast(1);
+        list.addLast(5);
+        list.addLast(2);
+        assertEquals(0,list.indexOf(4));
+    }
+    @Test
+    public void indedxOfFindsCorrectIndexTest3(){
+        list.addLast(4);
+        list.addLast(3);
+        list.addLast(1);
+        list.addLast(5);
+        list.addLast(2);
+        assertEquals(4,list.indexOf(2));
+    }
+    @Test
+    public void removingEntriesByIndexWorksTest(){
+        list.addLast(4);
+        list.addLast(3);
+        list.addLast(1);
+        list.addLast(5);
+        list.addLast(2);
+        list.removeAtIndex(0);
+        int[] correct = {3,1,5,2};
+        for(int i=0;i<4; i++){
+            assertEquals(correct[i],list.getAndRemoveFirst());
+        }
+    }
+    @Test
+    public void removingEntriesByIndexWorksTest2(){
+        list.addLast(4);
+        list.addLast(3);
+        list.addLast(1);
+        list.addLast(5);
+        list.addLast(2);
+        list.removeAtIndex(3);
+        int[] correct = {4,3,1,2};
+        for(int i=0;i<4; i++){
+            assertEquals(correct[i],list.getAndRemoveFirst());
+        }
+    }
+
 }
