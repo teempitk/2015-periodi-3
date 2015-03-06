@@ -51,4 +51,21 @@ public class ArrayUtils {
         }
         return j;
     }
+
+    /**
+     * Käytetään mainissa testaamaan, mitä parametreja ohjelmalle on annettu. Ei
+     * ota huomioon eroa isojen ja pienten kirjainten välillä.
+     *
+     * @param arr Taulukko, josta etsitään.
+     * @param s Merkkijono, jota etsitään.
+     * @return true jos merkkijono esiintyy taulukossa, muuten false.
+     */
+    public static boolean contains(String[] arr, String s) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i].equalsIgnoreCase(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -18,14 +18,14 @@ public class HuffmanNodeTest {
     @Before
     public void setUp() {
         leftChild = new HuffmanNode('a', 1);
-        rightChild = new HuffmanNode('b', 1);
+        rightChild = new HuffmanNode('b', 2);
         parent = new HuffmanNode(leftChild, rightChild);
         siblingOfParent = new HuffmanNode('c', 1);
         parentOfParent = new HuffmanNode(parent, siblingOfParent);
     }
 
     @Test
-    public void LeafNodeConstructorSetsCharCorrectlyTest() {
+    public void LeafNodeConstructorSetsByteCorrectlyTest() {
         assertEquals('a', leftChild.getByteValue());
     }
 
@@ -46,16 +46,28 @@ public class HuffmanNodeTest {
     
     @Test
     public void FrequencyCalculatedCorrectlyForInternalNodeTest(){
-        assertEquals(2, parent.getFrequency());
+        assertEquals(3, parent.getFrequency());
     }
     
     @Test
     public void FrequencyCalculatedCorrectlyForInternalNodeTest2(){
-        assertEquals(3, parentOfParent.getFrequency());
+        assertEquals(4, parentOfParent.getFrequency());
     }
     
     @Test
     public void movingDownwardsInTheTreeGoesAsItShouldtest(){
         assertEquals(parentOfParent.getLeft().getRight(),rightChild);
+    }
+    @Test
+    public void comparisonReturnsCorrectResultsTest1(){
+        assertTrue(leftChild.compareTo(rightChild)<0);
+    }
+    @Test
+    public void comparisonReturnsCorrectResultsTest2(){
+        assertTrue(parent.compareTo(leftChild)>0);
+    }
+    @Test
+    public void comparisonReturnsCorrectResultsTest3(){
+        assertTrue(leftChild.compareTo(siblingOfParent)==0);
     }
 }

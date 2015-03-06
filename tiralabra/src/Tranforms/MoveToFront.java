@@ -44,23 +44,12 @@ public class MoveToFront {
      */
     public static void transform(String inputFile, String outputFile) throws IOException {
 
-        System.out.println("Move to front transformation started");
-        long mtfStartTime = System.nanoTime();
-
-        long initStartTime = System.nanoTime();
-        System.out.print("Phase 1/2. Initializing variables ... ");
         initializeVars(inputFile, outputFile);
-        System.out.println("\t\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - initStartTime) * 1.0e-9) + " sec");
 
-        long replacingStartTime = System.nanoTime();
-        System.out.print("Phase 2/2. Replacing bytes with indices ... ");
         for (int i = 0; i < data.length; i++) {
             fstream.write((byte) mtf(data[i]));
         }
         fstream.close();
-        System.out.println("\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - replacingStartTime) * 1.0e-9) + " sec");
-
-        System.out.println("Move to front transform finished. Total time: " + (System.nanoTime() - mtfStartTime) * 1.0e-9 + " sec");
     }
 
     /**
@@ -85,7 +74,7 @@ public class MoveToFront {
         for (int i = 0; i < 256; i++) {
             int b = i;
             if(b>127)b-=256;
-            byteList.addLast((byte) b);
+            byteList.insertLast((byte) b);
         }
     }
 
@@ -99,7 +88,7 @@ public class MoveToFront {
     private static int mtf(byte b) {
         int index = byteList.indexOf(b);
         byteList.removeAtIndex(index);
-        byteList.addFirst(b);
+        byteList.insertFirst(b);
         if (index > 127) {
             index -= 256;
         }
@@ -115,7 +104,7 @@ public class MoveToFront {
     private static void mtf(int index) {
         byte b = byteList.getElementAtIndex(index);
         byteList.removeAtIndex(index);
-        byteList.addFirst(b);
+        byteList.insertFirst(b);
     }
 
     /**
@@ -126,16 +115,8 @@ public class MoveToFront {
      * @throws IOException
      */
     public static void reverseTransform(String inputFile, String outputFile) throws IOException {
-        System.out.println("Move to front transform started");
-        long mtfStartTime = System.nanoTime();
-
-        long initStartTime = System.nanoTime();
-        System.out.print("Phase 1/2. Initializing variables ... ");
         initializeVars(inputFile, outputFile);
-        System.out.println("\t\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - initStartTime) * 1.0e-9) + " sec");
 
-        System.out.print("Phase 2/2. Replacing bytes with indices ... ");
-        long replacingStartTime = System.nanoTime();
         for (int i = 0; i < data.length; i++) {
             int index = data[i];
             if (index < 0) {
@@ -145,9 +126,7 @@ public class MoveToFront {
             mtf(index);
         }
         fstream.close();
-        System.out.println("\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - replacingStartTime) * 1.0e-9) + " sec");
 
-        System.out.println("Move to front transform finished. Total time: " + (System.nanoTime() - mtfStartTime) * 1.0e-9 + " sec");
 
     }
 }

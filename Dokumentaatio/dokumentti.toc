@@ -1,0 +1,14 @@
+\select@language {finnish}
+\contentsline {section}{\numberline {1}M\"a\"arittelydokumentti}{1}
+\contentsline {section}{\numberline {2}Toteutusdokumentti}{2}
+\contentsline {subsection}{\numberline {2.1}Pakkaus}{2}
+\contentsline {subsubsection}{\numberline {2.1.1}Burrows-Wheeler -muunnos (BWT)}{2}
+\contentsline {subsubsection}{\numberline {2.1.2}Move to front -muunnos (MTF)}{3}
+\contentsline {subsubsection}{\numberline {2.1.3}Huffman-koodaus}{4}
+\contentsline {subsection}{\numberline {2.2}Purku}{6}
+\contentsline {subsubsection}{\numberline {2.2.1}Huffman-koodaus}{6}
+\contentsline {subsubsection}{\numberline {2.2.2}Move to front -muunnos}{7}
+\contentsline {subsubsection}{\numberline {2.2.3}Burrows\penalty \@M \hskip \z@skip \discretionary {-}{}{}\penalty \@M \hskip \z@skip --Wheeler -muunnos}{7}
+\contentsline {section}{\numberline {3}K\"aytt\"oohje}{9}
+\contentsline {section}{\numberline {4}Testausdokumentti}{9}
+\contentsline {section}{L\"ahteet}{9}

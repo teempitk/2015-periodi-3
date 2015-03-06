@@ -59,14 +59,14 @@ public class HuffmanTree {
         for (int i = 0; i < frequencyTable.length; i++) {
             if (frequencyTable[i] > 0) {
                 HuffmanNode newnode = new HuffmanNode(i, frequencyTable[i]);
-                list.addPreservingOrder(newnode,comparator);
+                list.insertPreservingOrder(newnode,comparator);
             } else {
                 codewords[frequencyTable[i]] = null;
             }
         }
         while (list.size() >= 2) {
             root = new HuffmanNode(list.getAndRemoveFirst(),list.getAndRemoveFirst());
-            list.addPreservingOrder(root,comparator);
+            list.insertPreservingOrder(root,comparator);
         }
         root = (HuffmanNode)list.getFirst();
     }

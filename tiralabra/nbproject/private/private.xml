@@ -3,8 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/test/Transforms/BurrowsWheelerTest.java</file>
-            <file>file:/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/src/Utils/ArrayUtils.java</file>
+            <file>file:/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/src/Tranforms/BurrowsWheeler.java</file>
+            <file>file:/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/src/Tranforms/MoveToFront.java</file>
+            <file>file:/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/src/Huffman/HuffmanTree.java</file>
+            <file>file:/Users/teemupitkanen1/Documents/Koulu/2015-periodi-3/tiralabra/src/Utils/BitConversions.java</file>
         </group>
     </open-files>
 </project-private>

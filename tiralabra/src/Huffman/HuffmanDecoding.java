@@ -45,25 +45,16 @@ public class HuffmanDecoding {
      * @param outFile Tiedosto, johon puretaan
      */
     public static void decode(String inFile, String outFile) throws IOException {
-        System.out.println("Huffman decoding started.");
-        long decodingStartTime = System.nanoTime();
 
-        long codewordReadingStartTime = System.nanoTime();
-        System.out.print("Phase 1/2. Reading codewords ... ");
         breader = new BitReader(new File(inFile));
         bwriter = new BitWriter(new File(outFile));
         codes = new CodewordDictionary();
         readCodewordsFromFile();
-        System.out.println("\t\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - codewordReadingStartTime) * 1.0e-9) + " sec");
 
-        long translatingStartTime = System.nanoTime();
-        System.out.print("Phase 2/2. Translating data ... ");
         decompress();
-        System.out.println("\t\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - translatingStartTime) * 1.0e-9) + " sec");
         breader.close();
         bwriter.writeTheLastBits("");
         
-        System.out.println("Huffman Decoding finished. Total time: " + (System.nanoTime() - decodingStartTime) * 1.0e-9 + " sec");
     }
 
     /**

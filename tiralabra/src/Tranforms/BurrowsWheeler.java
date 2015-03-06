@@ -4,6 +4,7 @@ import DataStructures.MyLinkedList;
 import Utils.BitConversions;
 import Utils.ArrayUtils;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -41,6 +42,10 @@ public class BurrowsWheeler {
      */
     private static byte[] data;
     /**
+     * Taulukko, johon muunnettu data rakennetaan.
+     */
+    private static byte[] transformedData;
+    /**
      * Sisältää viitteen datan jokaisen "sanan" alkuun. BWT:ssä ideana on
      * karkeasti muodostaa data.length x data.length -kokoinen matriisi.
      * Matriisin i:nnellä rivillä on kaikki datan tavut järjestyksessä data[i
@@ -65,16 +70,16 @@ public class BurrowsWheeler {
      * @throws IOException
      */
     public static void transform(String inputFile, String outputFile) throws IOException {
-        System.out.println("Burrows-Wheeler transform started.");
-        long BWTStartTime = System.nanoTime();
         data = Files.readAllBytes(Paths.get(inputFile));
-        byte[] transformedData = new byte[data.length];
+        transformedData = new byte[data.length];
         int lastByteInOriginalDataPointer = 0;
         lines = new int[data.length];
         for (int i = 0; i < data.length; i++) {
             lines[i] = i;
         }
+
         lines = quickSortBWTLines(lines, 0);
+
         for (int i = 0; i < data.length; i++) {
             transformedData[i] = data[(lines[i] - 1 + data.length) % data.length];
             if (lines[i] == 0) {
@@ -85,7 +90,6 @@ public class BurrowsWheeler {
         outStream.write(BitConversions.intToByteArray(lastByteInOriginalDataPointer));
         outStream.write(transformedData);
         outStream.close();
-        System.out.println("Burrows-Wheeler transform finished. Total time: " + (System.nanoTime() - BWTStartTime) * 1.0e-9 + " sec");
     }
 
     /**
@@ -186,20 +190,82 @@ public class BurrowsWheeler {
      * @throws IOException
      */
     public static void inverseTransform(String inputFile, String outputFile) throws IOException {
-        System.out.println("Burrows-Wheeler inverse transform started.");
-        long inverseBWTStartTime = System.nanoTime();
-
-        System.out.print("Phase 1/4. Generating first and last column ... ");
-        long columnsStartTime = System.nanoTime();
         data = Files.readAllBytes(Paths.get(inputFile));
         int indexOfLastCharInOriginalData = readIndexOfLastFromTheBeginningOfData();
-        byte[] sorted = Arrays.copyOf(data, data.length);
-        ArrayUtils.quickSort(sorted, 0, sorted.length - 1);
-        System.out.println(" "
-                + "Finished. Time: " + String.format("%.3f", (System.nanoTime() - columnsStartTime) * 1.0e-9) + " sec");
+        byte[] firstColumn = Arrays.copyOf(data, data.length);
+        ArrayUtils.quickSort(firstColumn, 0, firstColumn.length - 1);
 
-        System.out.print("Phase 2/4. Indexing byte occurrences ... ");
-        long indexingStartTime = System.nanoTime();
+        MyLinkedList<Integer>[] arr = createIndexingOfByteOccurrences();
+
+        int[] followingBytes = findOutAllTwoByteSequencesInOriginalData(firstColumn, arr);
+
+        writeOriginalDataToFile(indexOfLastCharInOriginalData, followingBytes, outputFile);
+    }
+
+    /**
+     * Metodi lukee alkuperäisen data edellisessä BWT:n vaiheessa luodun
+     * tavuparien järjestyksen perusteella, ja kirjoittaa sen tiedostoon.
+     *
+     * @param indexOfLastCharInOriginalData Osoitin BWT-matriisin viimeiseen
+     * sarakkeeseen, joka kertoo mikä tavuista oli alkuperäisen datan viimeinen.
+     * Tämän avulla matriisista osataan valita alkuperäistä dataa vastaava rivi.
+     * @param followingBytes Taulukko, joka kertoo kutakin tavua seuraavan datan
+     * indeksin BWT-matriisin viimeisessä sarakkeessa.
+     * @param outputFile Tiedosto, johon palautettu data kirjoitetaan.
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    private static void writeOriginalDataToFile(int indexOfLastCharInOriginalData, int[] followingBytes, String outputFile) throws FileNotFoundException, IOException {
+        byte[] originalData = new byte[data.length];
+        int indexOfCurr = indexOfLastCharInOriginalData;
+        for (int i = 0; i < data.length; i++) {
+            originalData[(data.length - 1 + i) % data.length] = data[indexOfCurr];
+            indexOfCurr = followingBytes[indexOfCurr];
+        }
+        FileOutputStream outStream = new FileOutputStream(new File(outputFile));
+        outStream.write(originalData);
+        outStream.close();
+    }
+
+    /**
+     * Metodi selvittää kaikki alkuperäisessä datassa esiintyvät peräkkäiset
+     * kahden tavun parit. Huom! Kyseessä siis oikeasti vastaavat tavut, ei vain
+     * samanlaiset.
+     *
+     * @param firstColumn BWT-matriisin ensimmäinen sarake
+     * (aakkosjärjestyksessä).
+     * @param arr Indeksointi tavujen esiintymisistä viimeisessä sarakkeessa.
+     * @return Taulukko, jonka i:nnessä indeksissä on indeksi (viimeiseen
+     * sarakkeeseen), josta löytyy tätä tavua seuraava tavu alkuperäisessä
+     * datassa.
+     */
+    private static int[] findOutAllTwoByteSequencesInOriginalData(byte[] firstColumn, MyLinkedList<Integer>[] arr) {
+        int[] followingBytes = new int[data.length];
+        for (int i = 0; i < firstColumn.length; i++) {
+            byte b = firstColumn[i];
+            int index = b;
+            if (index < 0) {
+                index += 256;
+            }
+            MyLinkedList<Integer> list = arr[index];
+            followingBytes[i] = list.getFirst();
+            list.removeFirst();
+        }
+        return followingBytes;
+    }
+
+    /**
+     * Metodi rakentaa indeksoinnin kunkin tavun esiintymisindekseistä
+     * muunnetussa datassa. BWT:n ominaisuuksiin kuuluu, että muunnosmatriisissa
+     * kunkin tavun i:s esiintymiskerta ensimmäisessä sarakkeessa vastaa saman
+     * tavun i:nnettä esiintymiskertaa viimeisessä sarakkeessa. Tämän avulla
+     * tavuparit saadaan yhdistettyä ja muodostettua koko alkuperäinen data.
+     *
+     * @return Taulukko, jonka i:nnessä indeksissä on lista indeksejä, joissa
+     * i:s tavu esiintyy. Esim indeksissä 1 on lista tavun 00000001
+     * esiintymissijainneista.
+     */
+    private static MyLinkedList<Integer>[] createIndexingOfByteOccurrences() {
         MyLinkedList<Integer>[] arr = new MyLinkedList[256];
         for (int i = 0; i < data.length; i++) {
             byte b = data[i];
@@ -212,39 +278,9 @@ public class BurrowsWheeler {
                 list = new MyLinkedList();
                 arr[index] = list;
             }
-            list.addLast(i);
+            list.insertLast(i);
         }
-        System.out.println("\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - indexingStartTime) * 1.0e-9) + " sec");
-
-        System.out.print("Phase 3/4. Combining pairs of bytes ... ");
-        long pairsStartTime = System.nanoTime();
-        int[] followingLetters = new int[data.length];
-        for (int i = 0; i < sorted.length; i++) {
-            byte b = sorted[i];
-            int index = b;
-            if (index < 0) {
-                index += 256;
-            }
-            MyLinkedList<Integer> list = arr[index];
-            followingLetters[i] = list.getFirst();
-            list.removeFirst();
-        }
-        System.out.println("\t Finished. Time: " + String.format("%.3f", (System.nanoTime() - pairsStartTime) * 1.0e-9) + " sec");
-
-        System.out.print("Phase 4/4. Linking pairs to get complete data ...");
-        long dataGenerationStartTime = System.nanoTime();
-        byte[] originalData = new byte[data.length];
-        int indexOfCurr = indexOfLastCharInOriginalData;
-        for (int i = 0; i < data.length; i++) {
-            originalData[(data.length - 1 + i) % data.length] = data[indexOfCurr];
-            indexOfCurr = followingLetters[indexOfCurr];
-        }
-
-        FileOutputStream outStream = new FileOutputStream(new File(outputFile));
-        outStream.write(originalData);
-        outStream.close();
-        System.out.println("Finished. Time: " + String.format("%.3f", (System.nanoTime() - dataGenerationStartTime) * 1.0e-9) + " sec");
-        System.out.println("Burrows-Wheeler inverse transform finished. Total time: " + (System.nanoTime() - inverseBWTStartTime) * 1.0e-9 + " sec");
+        return arr;
     }
 
     /**

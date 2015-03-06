@@ -37,7 +37,7 @@ public class MyLinkedList< E> {
      *
      * @param val Listaan lisättävä arvo.
      */
-    public void addFirst(E val) {
+    public void insertFirst(E val) {
         ListEntry entry = new ListEntry(val);
         entry.next = first;
         first = entry;
@@ -54,7 +54,7 @@ public class MyLinkedList< E> {
      *
      * @param val Listaan lisättävä arvo.
      */
-    public void addLast(E val) {
+    public void insertLast(E val) {
         ListEntry entry = new ListEntry(val);
         entry.prev = last;
         last = entry;
@@ -184,7 +184,7 @@ public class MyLinkedList< E> {
      * @param val Listaan lisättävä arvo
      * @param comp Lisättävien arvojen vertailuun kelpaava comparator
      */
-    public void addPreservingOrder(E val, Comparator<E> comp) {
+    public void insertPreservingOrder(E val, Comparator<E> comp) {
         size++;
         ListEntry entry = new ListEntry(val);
         if (first == null) {

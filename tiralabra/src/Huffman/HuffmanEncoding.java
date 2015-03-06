@@ -41,32 +41,15 @@ public class HuffmanEncoding {
      * @throws java.io.IOException
      */
     public static void encode(String inFile, String outFile) throws IOException {
-        System.out.println("Huffman encoding started");
-        long encodingStartTime = System.nanoTime();
-
-        long countingStartTime = System.nanoTime();
-        System.out.print("Phase 1/4. Counting bytes ... ");
         countDifferentBytesInFile(inFile);
-        System.out.println("\t\t\t Finished. Time: " + String.format("%.3f",(System.nanoTime() - countingStartTime) * 1.0e-9) + " sec");
 
-        long buildingStartTime = System.nanoTime();
-        System.out.print("Phase 2/4. Building Huffman tree ... ");
         codes = HuffmanTree.huffmanCodewords(freqs);
-        System.out.println("\t\t Finished. Time: " + String.format("%.3f",(System.nanoTime() - buildingStartTime) * 1.0e-9) + " sec");
 
-        long writeEncodingStartTime = System.nanoTime();
-        System.out.print("Phase 3/4. Writing encoding ...  ");
         bwriter = new BitWriter(new File(outFile));
         writeEncodingToTheStartOfFile();
-        System.out.println("\t\t Finished. Time: " + String.format("%.3f",(System.nanoTime() - writeEncodingStartTime) * 1.0e-9) + " sec");
 
-        long writeDataStartTime = System.nanoTime();
-        System.out.print("Phase 4/4. Writing data ...  ");
         writeToFileAsBits(inFile);
         bwriter.writeTheLastBits(codes[256]);
-        System.out.println("\t\t\t Finished. Time: " + String.format("%.3f",(System.nanoTime() - writeDataStartTime) * 1.0e-9) + " sec");
-
-        System.out.println("Huffman Encoding finished. Total time: " + (System.nanoTime() - encodingStartTime) * 1.0e-9 + " sec");
     }
 
     /**
