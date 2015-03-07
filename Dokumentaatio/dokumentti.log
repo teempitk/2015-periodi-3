@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.8.29)  6 MAR 2015 14:30
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.8.29)  7 MAR 2015 19:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -702,79 +702,125 @@ Overfull \hbox (0.16396pt too wide) in paragraph at lines 59--60
 ä \T1/cmtt/m/n/12 MyLinkedList\T1/cmr/m/n/12 iä jär-
  []
 
-[1]
-
-LaTeX Warning: Reference `bwtwikipedia' on page 2 undefined on input line 93.
-
-[2]
-
-LaTeX Warning: Reference `spamateriaali' on page 3 undefined on input line 95.
-
-[3] [4] [5]
-Overfull \hbox (15.4455pt too wide) in paragraph at lines 163--168
+[1] [2] [3] [4] [5]
+Overfull \hbox (15.4455pt too wide) in paragraph at lines 166--171
 [][] 
  []
 
 
-Overfull \hbox (49.96065pt too wide) in paragraph at lines 169--174
+Overfull \hbox (49.96065pt too wide) in paragraph at lines 172--177
 [][] 
  []
 
 [6] [7] [8]
-Overfull \hbox (54.74106pt too wide) in paragraph at lines 277--277
+Overfull \hbox (54.74106pt too wide) in paragraph at lines 273--273
+[]\T1/cmtt/m/n/12 > java -jar tiralabra.jar [halutut optiot joukosta {-c,-d,-p}
+] tiedoston_nimi,[] 
+ []
+
+[9]
+Overfull \hbox (54.74106pt too wide) in paragraph at lines 294--294
 []\T1/cmtt/m/n/12 Phase 1/3: Burrows-Wheeler transform started ...    Finished.
  Time: 0,369 sec.[] 
  []
 
 
-Overfull \hbox (54.74106pt too wide) in paragraph at lines 277--277
+Overfull \hbox (54.74106pt too wide) in paragraph at lines 294--294
 []\T1/cmtt/m/n/12 Phase 2/3: Move to front transformation started ... Finished.
  Time: 0,286 sec.[] 
  []
 
 
-Overfull \hbox (54.74106pt too wide) in paragraph at lines 277--277
+Overfull \hbox (54.74106pt too wide) in paragraph at lines 294--294
 []\T1/cmtt/m/n/12 Phase 3/3: Huffman encoding started ...             Finished.
  Time: 0,137 sec.[] 
  []
 
 
-Overfull \hbox (42.39407pt too wide) in paragraph at lines 277--277
+Overfull \hbox (42.39407pt too wide) in paragraph at lines 294--294
 []\T1/cmtt/m/n/12 File size reduced from 167518 bytes to 55788 bytes (33,3% of 
 original size).[] 
  []
 
-[9] (./dokumentti.aux)
 
-LaTeX Warning: There were undefined references.
+Overfull \hbox (3.93663pt too wide) in paragraph at lines 301--302
+[]\T1/cmr/m/n/12 Tietorakenteiden tes-tauk-ses-sa py-rin ot-ta-maan mah-dol-li-
+sim-man hy-vin huo-mioon kaik-
+ []
 
- ) 
+
+Overfull \hbox (61.7878pt too wide) in paragraph at lines 304--305
+\T1/cmr/m/n/12 heet, mut-ta nii-den li-säk-si myös mui-ta. Käy-te-tyt tes-ti-ti
+e-dos-tot löy-ty-vät \T1/cmtt/m/n/12 tiralabra/sampleFiles\T1/cmr/m/n/12 -
+ []
+
+[10] [11]
+Overfull \hbox (42.5407pt too wide) in paragraph at lines 354--363
+ [] 
+ []
+
+[12] <compression.png, id=66, 578.16pt x 433.62pt>
+File: compression.png Graphic file (type png)
+ <use compression.png>
+Package pdftex.def Info: compression.png used on input line 367.
+(pdftex.def)             Requested size: 341.43306pt x 256.07178pt.
+
+Overfull \hbox (15.13072pt too wide) in paragraph at lines 377--386
+ [] 
+ []
+
+[13 <./compression.png>] <decompression.png, id=72, 578.16pt x 433.62pt>
+File: decompression.png Graphic file (type png)
+
+<use decompression.png>
+Package pdftex.def Info: decompression.png used on input line 391.
+(pdftex.def)             Requested size: 341.43306pt x 256.07178pt.
+ <bwtdecompress.png, id=73, 578.16pt x 433.62pt>
+File: bwtdecompress.png Graphic file (type png)
+
+<use bwtdecompress.png>
+Package pdftex.def Info: bwtdecompress.png used on input line 401.
+(pdftex.def)             Requested size: 341.43306pt x 256.07178pt.
+ [14 <./decompression.png>]
+Underfull \hbox (badness 3333) in paragraph at lines 414--417
+[]\T1/cmr/m/n/12 Spencer Car-roll "An Ea-sy to Un-ders-tand Expla-na-tion of th
+e
+ []
+
+
+Underfull \hbox (badness 3333) in paragraph at lines 414--417
+\T1/cmr/m/n/12 Bur-rows Whee-ler Transform"http://spencer-carroll.com/an-easy-t
+o-
+ []
+
+[15 <./bwtdecompress.png>] [16] (./dokumentti.aux) ) 
 Here is how much of TeX's memory you used:
- 14048 strings out of 493315
- 243734 string characters out of 6137904
- 344301 words of memory out of 5000000
- 17168 multiletter control sequences out of 15000+600000
+ 14078 strings out of 493315
+ 244173 string characters out of 6137904
+ 344383 words of memory out of 5000000
+ 17194 multiletter control sequences out of 15000+600000
  16094 words of font info for 46 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  56i,17n,55p,3238b,964s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
-</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><
-/usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></
-usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></us
-r/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/l
-ocal/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/lo
-cal/texlive/2013/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/loca
-l/texlive/2013/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/
-texlive/2013/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/te
-xlive/2013/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb></usr/local/texl
-ive/2013/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texliv
-e/2013/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/
-2013/texmf-dist/fonts/type1/public/cm-super/sfti1200.pfb></usr/local/texlive/20
-13/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on dokumentti.pdf (12 pages, 246882 bytes).
+{/usr/local/texlive/2013/te
+xmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texlive/2013/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2013/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2013/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2013/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2013/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2013/texmf-dist/f
+onts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2013/texmf-dist/fon
+ts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2013/texmf-dist/fonts
+/type1/public/cm-super/sfbx1728.pfb></usr/local/texlive/2013/texmf-dist/fonts/t
+ype1/public/cm-super/sfrm0600.pfb></usr/local/texlive/2013/texmf-dist/fonts/typ
+e1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1
+/public/cm-super/sfrm1200.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/p
+ublic/cm-super/sfti1200.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/pub
+lic/cm-super/sftt1200.pfb>
+Output written on dokumentti.pdf (19 pages, 337898 bytes).
 PDF statistics:
- 99 PDF objects out of 1000 (max. 8388607)
- 71 compressed objects within 1 object stream
+ 129 PDF objects out of 1000 (max. 8388607)
+ 88 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 13 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 28 words of extra memory for PDF output out of 10000 (max. 10000000)
 

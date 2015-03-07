@@ -48,4 +48,16 @@ public class ArrayUtilsTest {
         ArrayUtils.quickSort(bytearr, 0, 4);
         assertArrayEquals(correct, bytearr);
     }
+    @Test
+    public void containsFindsOccurrenceTest(){
+        String[] test = {"a","b","c"};
+        String s = "b";
+        assertTrue(ArrayUtils.contains(test, s));
+    }
+    @Test
+    public void containsReturnsFalseIfMissingTest(){
+        String[] test = {"a","b","c"};
+        String s = "D";
+        assertFalse(ArrayUtils.contains(test, s));
+    }
 }

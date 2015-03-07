@@ -59,9 +59,12 @@ Jokainen kompressiopinon elementti on jo itsessään oma algoritminsa, mutta niide
 \item insertion sort (Huffman-puun rakennuksessa, käytettäessä {\tt MyLinkedList}iä järjestettynä {\tt insertPreservingOrder}-metodilla)
 \end{itemize}
 
-Pakkausohjelmille on tärkeää toimia tehokkaasti niin tila- kuin aikavaativuuksien suhteen, koska syötteet ovat usein hyvin suuria. Käytetyt menetelmät toimivat pääosin lineaarisessa ajassa, mistä poikkeuksena Burrows-Wheeler -muunnos, joka vaatii keskimäärin $\mathcal{O}(n \log n)$-ajassa toimivia järjestämisalgoritmeja. Tarkemmin aikavaativuuksia on eroteltu toteutusdokumentissa.
+Pakkausohjelmille on tärkeää toimia tehokkaasti niin tila- kuin aikavaativuuksien suhteen, koska syötteet ovat usein hyvin suuria. Käytetyt menetelmät toimivat pääosin lineaarisessa ajassa, mistä poikkeuksena Burrows-Wheeler -muunnos, joka vaatii keskimäärin $\mathcal{O}(n \log n)$-ajassa toimivia järjestämisalgoritmeja. Tarkemmin aikavaativuuksia on eriteltu toteutusdokumentissa.
 
 \section{Toteutusdokumentti}
+\subsection{Ohjelman rakenne}
+Ohjelman rakenne on todella yksinkertainen, ja isojen linjojen toimintalogiikka on pitkälti Main-luokassa, joka tulkitsee annettujen parametrien kelpoisuuden, ja kutsuu pakkausoperaatioita tekeviä metodeja. Jokainen kolmesta pakkaus- ja muunnosoperaatioluokasta tarjoaa operaationsa staattisena metodina, joita Main-luokka kutsuu. Seuraavissa osioissa kuvataan yksityiskohtaisemmin eri menetelmien sisäistä toteutusta.
+
 \subsection{Pakkaus}
 \subsubsection{Burrows-Wheeler -muunnos (BWT)}
 Datalle ensimmäisenä tehty Burrows-Wheeler -muunnos ei pienennä datan kokoa lainkaan, vaan itseasiassa kasvattaa sitä neljällä tavulla, ja muunnoksen idea pakkauksessa onkin pelkästään parantaa muiden menetelmien tehokkuutta. Muunnoksen jälkeen datassa esiintyy yleensä enemmän peräkkäisiä saman tavun toistoja. Muunnoksen voi ajatella toimivan seuraavalla tavalla. Datasta muodostetaan ensin matriisi, jonka jokaisella rivillä dataa on "kierretty" yksi pykälä eteenpäin. Jos alkuperäinen data olisi siis "banana", matriisi olisi seuraava:
@@ -90,9 +93,9 @@ n & a & n & a & b & a
 \end{tabular}\right]$
 \end{center}
 
-Muunnettu data on tämän matriisin viimeinen sarake, ja datan oikeassa järjestyksessä sisältävän rivin numero, tässä siis "nnbaaa", 3. Tässä projektissa muunnos toteutettiin Wikipedian \ref{bwtwikipedia} artikkelin mukaisesti. Käytännön toteutuksissa datan koon suhteen neliöllistä matriisia ei tietenkään toteuteta kokonaan, vaan kunkin matriisin rivin voi esittää sanan ensimmäisen tavun indeksinä alkuperäisessä datassa.
+Muunnettu data on tämän matriisin viimeinen sarake, ja datan oikeassa järjestyksessä sisältävän rivin numero, tässä siis "nnbaaa", 3. Tässä projektissa muunnos toteutettiin Wikipedian \cite{bwtwikipedia} artikkelin mukaisesti. Käytännön toteutuksissa datan koon suhteen neliöllistä matriisia ei tietenkään toteuteta kokonaan, vaan kunkin matriisin rivin voi esittää sanan ensimmäisen tavun indeksinä alkuperäisessä datassa.
 
-Datan luku tiedostosta ja matriisia kuvaavien osoittimien alustus ovat luonnollisesti luokkaa $\mathcal{O}(n)$ niin aika- kuin tilavaativuudeltaan. Matriisin rivien järjestys tapahtuu \ref{spamateriaali} kuvatulla \textit{string quicksort}illa. Pitkien merkkijonojen (tai tässä tavutaulukoiden) normaali pikajärjestäminen ei toimi $\mathcal{O}(n\log n)$-ajassa, sillä kahden merkkijonojen vertaaminen ei aina onnistu yhdellä operaatiolla, vaan voi vaatia jopa merkkijonon pituuden verran vertailuja. Merkkijonoille muokattu quicksort pitää rekursiossa mukana myös vertailun kohteena olevien merkkijonojen \textit{pisimmän yhtenevän alkuosan} (longest common prefix, lcp) pituuden, jolloin vertailu osataan aloittaa merkkijonon järkevästä indeksistä. Tällöin quicksortin aikavaativuus saadaan merkkijonoille toteutumaan ajassa $\mathcal{O}(n\log n)+\Sigma LCP$. Tässä $\Sigma LCP$ tarkoittaa summaa järjestetyn matriisin kunkin rivin yhteisestä etuliitteestä ylläolevaan riviin, siis \textit{banana}-esimerkissä 0 + 1 + 3 + 0  + 0 + 2 = 6. Satunnaisissa ja käytännön tapauksissa aakkosto (erilaisten esiintyvien tavujen määrä) on yleisesti suuri, jolloin yhteiset alkuosat ovat suhteellisen lyhyitä, ja aikavaativuus on käytännössä $\mathcal{O}(n \log n)$. Toteutettu algoritmi vaatii kussakin rekursion tasossa lineaarisen määrän tilaa, ja rekursion keskimääräinen syvyys on $\mathcal{O}(n)$, joten myös tilavaativuus on tässä $\mathcal{O}(n \log n)$, jota voisi luonnollisesti optimoida vielä paremmaksi.
+Datan luku tiedostosta ja matriisia kuvaavien osoittimien alustus ovat luonnollisesti luokkaa $\mathcal{O}(n)$ niin aika- kuin tilavaativuudeltaan. Matriisin rivien järjestys tapahtuu \cite{spamateriaali} kuvatulla \textit{string quicksort}illa. Pitkien merkkijonojen (tai tässä tavutaulukoiden) normaali pikajärjestäminen ei toimi $\mathcal{O}(n\log n)$-ajassa, sillä kahden merkkijonojen vertaaminen ei aina onnistu yhdellä operaatiolla, vaan voi vaatia jopa merkkijonon pituuden verran vertailuja. Merkkijonoille muokattu quicksort pitää rekursiossa mukana myös vertailun kohteena olevien merkkijonojen \textit{pisimmän yhtenevän alkuosan} (longest common prefix, lcp) pituuden, jolloin vertailu osataan aloittaa merkkijonon järkevästä indeksistä. Tällöin quicksortin aikavaativuus saadaan merkkijonoille toteutumaan ajassa $\mathcal{O}(n\log n)+\Sigma LCP$. Tässä $\Sigma LCP$ tarkoittaa summaa järjestetyn matriisin kunkin rivin yhteisestä etuliitteestä ylläolevaan riviin, siis \textit{banana}-esimerkissä 0 + 1 + 3 + 0  + 0 + 2 = 6. Satunnaisissa ja käytännön tapauksissa aakkosto (erilaisten esiintyvien tavujen määrä) on yleisesti suuri, jolloin yhteiset alkuosat ovat suhteellisen lyhyitä, ja aikavaativuus on käytännössä $\mathcal{O}(n \log n)$. Toteutettu algoritmi vaatii kussakin rekursion tasossa lineaarisen määrän tilaa, ja rekursion keskimääräinen syvyys on $\mathcal{O}(n)$, joten myös tilavaativuus on tässä $\mathcal{O}(n \log n)$, jota voisi luonnollisesti optimoida vielä paremmaksi.
 
 Muunnetun datan lukeminen järjestetystä matriisista on nyt $\mathcal{O}(n)$-operaatio, ja samoin datan kirjoitus tiedostoon. Toteutetun Burrows\---Wheeler -muunnoksen peräkkäisistä operaatioista raskain on siis matriisin rivien pikajärjestäminen, joka vie aikaa ja tilaa keskimäärin $\mathcal{O}(n \log n)$. Muunnetun tiedoston alkuun lisätään nyt vielä alkuperäisen datan viimeisen tavun osoitin. Tämä tallennetaan 32-bittisenä etumerkillisenä kokonaislukuna (int), joten suurimmat tiedostot, joille pakkaus voidaan tehdä ovat kooltaan $2^{31}-1 \approx$2 gigatavua.
 
@@ -101,7 +104,7 @@ Muunnetun datan lukeminen järjestetystä matriisista on nyt $\mathcal{O}(n)$-oper
 
 
 \subsubsection{Move to front -muunnos (MTF)}
-Move to front ei vaikuta datan kokoon lainkaan, mutta on oleellinen Burrows\---Wheelerin hyödyntämisessä Huffman-koodaukseen. Kuten edellä kuvattiin, BWT ei muuta datassa esiintyviä tavuja, vaan pelkästään niiden järjestystä. Jos tälle muunnetulle datalle ajettaisiin Huffman-koodaus, muunnoksella ei olisi mitään vaikutusta pakatun datan kokoon, sillä symbolikoodauksessa sama merkki korvattaisiin samalla bittijonolla sijainnista riippumatta. (Itseasiassa datan koko kasvaisi hieman lisätystä osoittimesta johtuen).
+Move to front \cite{mtfwiki} ei vaikuta datan kokoon lainkaan, mutta on oleellinen Burrows\---Wheelerin hyödyntämisessä Huffman-koodaukseen. Kuten edellä kuvattiin, BWT ei muuta datassa esiintyviä tavuja, vaan pelkästään niiden järjestystä. Jos tälle muunnetulle datalle ajettaisiin Huffman-koodaus, muunnoksella ei olisi mitään vaikutusta pakatun datan kokoon, sillä symbolikoodauksessa sama merkki korvattaisiin samalla bittijonolla sijainnista riippumatta. (Itseasiassa datan koko kasvaisi hieman lisätystä osoittimesta johtuen).
 
 MTF:ssa luodaan ensin kaikki mahdolliset 256 tavua sisältävä linkitetty lista, niin että kukin tavu on (etumerkitöntä) arvoaan vastaavassa indeksissä. Dataa käsitellään tavu kerrallaan, ja kukin tavu korvataan ensin tavun indeksillä edellä kuvatussa listassa, minkä jälkeen tavu siirretään listan ensimmäiseksi. MTF hyötyy nyt BWT:n tuottamista saman tavun toistoista, sillä kaikki toiston tavut ensimmäistä lukuunottamatta korvataan nollatavulla. Yleisesti tekstissä usein esiintyvät tavut korvataan pienillä luvuilla, joita esiintyy muunnetussa datassa paljon. Huffman-koodaus puolestaan hyötyy tästä tavujen epätasaisesta jakaumasta.
 
@@ -172,7 +175,7 @@ koodinpituus(0) & koodi(0) & koodinpituus(1) & koodi(1) & koodinpituus(2) & ...\
 \hline
 \end{tabular}
 
-\item Varsinainen data koodattuna (tässä '+' tarkoittaa koodisanojen konkatenointia)
+\item Varsinainen data koodattuna (tässä '+' tarkoittaa koodisanojen konkatenointia ja data[i] pakattavan datan tavua indeksissä i)
 
 \begin{tabular}{|c|}
 \hline
@@ -220,7 +223,7 @@ Algoritmin while-silmukka suoritetaan selvästi $\mathcal{O}(n)$ kertaa. Silmukan
 Move to front on menetelmistä samankaltaisin pakkaus- ja purkuvaiheessa. Myös purkuvaiheessa kaikki tavut alustetaan ensin listaan, mutta nyt toimitaan pakkausvaiheeseen nähden käänteisesti \--- luetaan ensin "oikean" tavun indeksi pakatusta tiedostosta, luetaan tavu listasta indeksin mukaisesti, ja siirretään sitten tavu taas listan alkuun ja lisätään se puretun datan loppuun. Kuten pakkauksessa, alustustoimenpiteet vaativat $\mathcal{O}(m)=\mathcal{O}(256)\mathcal{O}(1)$ ajan ja tilan. Dataa käsitellessä läpikäydään linkitettyä m-alkioista tavulistaa n-kertaa, ja kokonaisaikavaativuus on, kuten pakkauksessa, $\mathcal{O}(mn)=\mathcal{O}(n)$.
 
 \subsubsection{Burrows\---Wheeler -muunnos}
-Burrows-Wheeler -muunnos saadaan purettua seuraavasti: Muistetaan, että pakattu data vastasi BWT-matriisin viimeistä saraketta. Koska matriisin jokainen sarake sisältää datan kaikki symbolit, ja matriisin rivit olivat aakkosjärjestyksessä, saamme ensimmäisen sarakkeen yksinkertaisesti järjestämällä muunnetun datan tavut. Viimeisen sarakkeen lukeminen on tietenkin lineaarinen operaatio, ja ensimmäinen sarake saadaan pikajärjestämällä ajassa $\mathcal{O}(n \log n)$. Aiemmin käytetyssä \textit{banana}-esimerkissä tiedämme nyt siis:
+Burrows-Wheeler -muunnoksen purku on toteutettu kuten \cite{bwt_easy}:ssa Muistetaan, että pakattu data vastasi BWT-matriisin viimeistä saraketta. Koska matriisin jokainen sarake sisältää datan kaikki symbolit, ja matriisin rivit olivat aakkosjärjestyksessä, saamme ensimmäisen sarakkeen yksinkertaisesti järjestämällä muunnetun datan tavut. Viimeisen sarakkeen lukeminen on tietenkin lineaarinen operaatio, ja ensimmäinen sarake saadaan pikajärjestämällä ajassa $\mathcal{O}(n \log n)$. Aiemmin käytetyssä \textit{banana}-esimerkissä tiedämme nyt siis:
 
 \begin{center}
 $\left[\begin{tabular}{cccccc}
@@ -248,24 +251,38 @@ Luoduilla rakenteilla alkuperäinen data saadaan nyt purettua helposti \--- muist
 \end{verbatim}
 Operaation aikavativuus on selvästi lineaarinen datan kokoon nähden.
 
+\subsection{Jatkokehitysideoita}
+Ohjelman loppulinen toteutus saavuttaa halutut aikavaativuusluokat, mutta isommilla tiedostoilla pakkaus ja purku venyvät jopa kymmeniin sekunteihin. Aikavaativuusluokkatason parannusta on oikeastaan mahdoton saada, mutta käytännössä suuria eroja näkyi syntyvän esimerkiksi eri tiedoston luku- ja kirjoitusmenetelmiä käyttämällä. Etenkin lineaarisessa ajassa toimivaa Huffman-koodausta ja -purkua saisi varmasti optimoitua paljon nopeammaksi.
+
+Burrows-Wheeler -muunoksen toteutus rajaa pakattavan datan kokoa, ja rajan olisi sinänsä voinut muuttaa isommaksikin. Tällä hetkellä en ole myöskään ohjelmoinut näihin tapauksiin mitään varoitusta, joten ohjelma aiheuttanee virheen jos liian ison tiedoston pakkausta kokeilee.
+
+Kuten pakkausohjelmissa yleensä, toteutettavia menetelmiä voi aina lisätä aiempien perään, ja esimerkiksi alkuviikoilla suunnittelemani run length encoding jäikin lopulta toteuttamatta, ja voisi olla mukava toteuttaa vielä pakkaustehokkuuden parantamiseksi.
+
+
 \section{Käyttöohje}
-Ohjelman jar-tiedosto löytyy kohteesta {\tt tiralabra/dist/tiralabra.jar}. Ajettaessa ohjelmalle tulee antaa kaksi parametria:
+Ohjelman jar-tiedosto löytyy kohteesta {\tt tiralabra/dist/tiralabra.jar}. Ajettaessa ohjelmalle annetaan:
 \begin{itemize}
-\item "c" tai "d", eli pakataanko (compress) vai puretaanko (decompress)
-\item pakattavan tiedoston nimi
+\item Parametri -c tai -d, eli pakataanko (compress) vai puretaanko (decompress). Toinen ja vain toinen näistä on aina annettava.
+\item Vapaaehtoisesti parametri -p (print), joka tulostaa tietoa suorituksen etenemisestä.
+\item Pakattavan tiedoston nimi.
 \end{itemize}
 
-Pakkauksen esimerkkikomento voisi siis olla esimerkiksi:
+Komennon yleisrunko on siis
 \begin{verbatim}
-> java -jar tiralabra.jar c ../sampleFiles/alice.txt
+> java -jar tiralabra.jar [halutut optiot joukosta {-c,-d,-p}] tiedoston_nimi,
+\end{verbatim}
+
+ja pakkauksen esimerkkikomento voisi siis olla esimerkiksi:
+\begin{verbatim}
+> java -jar tiralabra.jar -c -p  ../sampleFiles/alice.txt
 \end{verbatim}
 
 ja purkukomento esimerkiksi
 \begin{verbatim}
-> java -jar tiralabra.jar d ../sampleFiles/alice.txt.teemuzip
+> java -jar tiralabra.jar -d -p ../sampleFiles/alice.txt.teemuzip
 \end{verbatim}
 
-Pakkauksen ja purun aikana ohjelma tulostaa tietoa etenemisestään, edellä mainittu pakkauksen esimerkkikomento voi tulostaa esimerkiksi:
+Jos tulostusoptio on annettu, ohjelma tulostaa tietoa etenemisestään, edellä mainittu pakkauksen esimerkkikomento voi tulostaa esimerkiksi:
 \begin{verbatim}
 > java -jar tiralabra.jar c ../sampleFiles/alice.txt 
 Compression started.
@@ -276,13 +293,175 @@ Compression finished. Total time: 0.818899 sec.
 File size reduced from 167518 bytes to 55788 bytes (33,3% of original size).
 \end{verbatim}
 
+
 \section{Testausdokumentti}
+\subsection{JUnit-testaus}
+Projektin automatisoitu testaus koostuu 92 JUnit-testistä. En käyttänyt mitään varsinaista testikattavuutta mittaavaa työkalua, mutta pyrin testaamaan silti toteutusta mahdollisimman kattavasti. Toteutin pakkaus- ja muunnosmenetelmille yksisuuntaisia testejä pieniin ja helposti käsin laskettaviin esimerkkeihin, ja toteutin myös edestakaisen oikeellisuuden testaavat testit sampleFiles-hakemiston tiedostoille alice.txt ja turing.jpg.
+
+Tietorakenteiden testauksessa pyrin ottamaan mahdollisimman hyvin huomioon kaikki erikoistapaukset, joita ohjelman suoritus voisi aiheuttaa. Tässä testaus osoittautui todella hyödylliseksi, ja auttoi hyvin löytämään ohjelmointivirheitä korvatessa javan valmiita tietorakenteita omilla toteutuksilla.
+
+\subsection{Empiirinen pakkaustehokkuuden testaus}
+Testasin myös ohjelman pakkaustehokkuutta olemassaoleviin tekstitiedostoja tehokkasti pakkaaviin ohjelmiin. Vertailuun valikoituivat Lempel-Ziv -koodaukseen pohjautuva gzip \cite{gzip} ja bzip2 \cite{bzip2}, joka sisältää kaikki tässä projektissa toteutetut välivaiheet, mutta niiden lisäksi myös muita. Käytetyt testitiedostot löytyvät {\tt tiralabra/sampleFiles}-hakemistosta.
+\begin{itemize}
+\item {\tt turing.jpg} - Keskikoon jpg-pakattu kuvatiedosto \cite{turing}
+\item {\tt alice.txt} - Alice's adventures in Wonderland Project Gutenbergista \cite{alicegutenberg}
+\item {\tt U00096.2.fas} - Escherichia coli -bakteerin genomi \cite{ecoli}
+\end{itemize}
+
+Alkuperäisten ja kullakin menetelmällä pakattujen tiedostojen koot löytyvät allaolevasta taulukosta.
+
+\begin{center}
+\begin{tabular}{c|ccc}
+& turing.jpg & alice.txt & U00096.2.fas\\
+\hline
+alkuperäinen & 51183 & 167518 & 4697740\\
+teemuzip & 51185 & 55788 & 1330270\\
+gzip & 50722 & 60636 & 1424418\\
+bzip2 & 50773 & 49037 & 1328000\\
+\end{tabular}
+\end{center}
+
+Kuten oli odotettavissa, mikään menetelmistä ei saavuta merkittävää tulosta tiedostolle {\tt turing.jpg}. Jo valmiiksi pakattu tiedosto sisältänee varsin heterogeenisesti kaikkia tavuja, eikä pakkauksessa hyödynnettävää säännöllisyyttä ole. Tiedosto oli otettu tähän lähinnä osoittamaan, ettei pakkauksen käyttö ei-optimaaliseen tiedostotyyppiinkään tuota mielivaltaisen suurta pakattua tiedostoa. Kuten havaitaan, "huonon" tiedoston pakkaus voi myös kasvattaa tiedoston kokoa, kuten toteuttamalleni ohjelmalleni tässä käy, onneksi kuitenkin hyvin vaatimattoman kahden tavun verran.
+
+Tekstimuotoista dataa sisältävien tiedostojen suhteen ohjelmani vaikuttaa sijoittuvan pakkaustehokkuudeltaan gzip:n ja bzip2:n välimaastoon, ja sama tulos onkin nähtävillä myös yllä esitetyissä testitapauksissa. Luonnollista kieltä sisältävä data pakkautuu noin kolmannekseen alkuperäisestä koostaan, kun taas lähinnä neljää merkkiä (T, A, G, C) sisältävä genomidata jopa hieman paremmin.
+
+\subsection{Empiirinen suorituskyvyn testaus}
+Toteutusdokumentaatiossa operaatioille todettiin olevan käytännön tapauksissa seuraavat aikavaativuudet:
+\begin{center}
+\begin{tabular}{c|cc}
+& pakkaus & purku\\
+\hline
+BWT & $\mathcal{O}(n \log n)$ & $\mathcal{O}(n \log n)$\\
+MTF & $\mathcal{O}(n)$ & $\mathcal{O}(n)$\\
+Huffman & $\mathcal{O}(n)$ & $\mathcal{O}(n)$
+\end{tabular}
+\end{center}
+
+Ensinnäkin on todettava, että tämän pakkausohjelman tapauksessa pakkausaikaan vaikuttaa vahvasti myös muut tekijät pelkän tiedoston koon lisäksi. BWT hyötyy nopeudessa mahdollisimman satunnaisesta datasta, sillä BWT-matriisin rivien vertailu järjestämisessä ratkeaa todennäköisesti sitä aiemmin, mitä satunnaisempi data. Toisaalta esimerkiksi MTF hyötyy tasan päinvastaisesta tapauksesta, ja toimii nopeimmin jos koko data on samaa tavua (tavu asetetaan ensimmäisen tavun käsittelyn jälkeen tavulistan alkuun, eikä sitä tarvitse enää sen jälkeen etsiä listasta). On myös huomattava, että ajallisen suorituskyvyn etu ei välttämättä ole pakkaustehokkuuden etu, kuten edellä mainitussa BWT-esimerkissä (satunnaisessa datassa ei ole pakkauksessa hyödynnettävää säännöllisyyttä, ja pakkaustehokkuus on huono).
+
+Kun pakkausohjelmalle annetaan ajettaessa parametri {\tt -p}, ohjelma tulostaa tietoa suorituksen etenemisestä ja kuhunkin vaiheeseen kuluneesta ajasta. Pakataan nyt aluksi seuraavat tiedostot:
+\begin{itemize}
+\item {\tt alice.txt}
+\item {\tt hamlet.txt} William Shakespeare: Hamlet \cite{hamlet}
+\item {\tt odysseia.txt} Homeros: Odysseia \cite{odysseia}
+\item {\tt seitseman.txt} Aleksis Kivi: Seitsemän veljestä \cite{seitseman}
+\item {\tt mobydick.txt} Herman Melville: Moby Dick \cite{mobydick}
+\end{itemize}
+
+Saatiin seuraavat tulokset:
+
+\begin{center}
+\begin{tabular}{c|ccccc}
+Kulunut aika (s) & alice & hamlet & odysseia & seitseman & mobydick\\
+ & (167 518 B) & (193 083 B) & (287 062 B) & (692 967 B) & (1 257 294 B)\\
+\hline
+BWT & 0,271 &0,297& 0,338 & 0,737 & 1,308\\
+MTF & 0,317 &0,386& 0,524 &  1,253 & 2,369\\
+Huffman & 0,139 &0,188& 0,220 & 0,469 & 1,058\\
+Yhteensä & 0,787231 &1.02652& 1.107054 & 2.484259 & 4.770644
+\end{tabular}
+\end{center}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=120mm]{compression.png}
+\caption{Pakkausaika. Violetti = Huffman-koodaus, sininen = BWT, punainen = MTF. Pakkauksen kokonaisaika mustalla, edellämainittujen tiedostojen koot vaaka-akselilla.}
+\label{pakkauskuva}
+\end{figure}
+
+Kuten kuvaajasta \ref{pakkauskuva} havaitaan, MTF:n ja Huffman-koodauksen lineaarinen aikavaativuus toteutuu testissä kuten pitääkin. Burrows-Wheeler näkyy toimivan tässä testissä jopa "paremmin kuin pitäisi", ja näyttää jopa lineaariselta. Kuitenkin, kuten edellä mainittiin, pakkauksen nopeuteen vaikuttavat monet muutkin tekijät. Lisäksi ohjelma tulostaa koko suoritusajan, jolloin esimerkiksi laitteiston muu kuormitus vaikuttaa tuloksiin. 
+
+Vastaavasti purkua testattaessa saatiin seuraavat tulokset:
+
+\begin{center}
+\begin{tabular}{c|ccccc}
+Kulunut aika (s) & alice & hamlet & odysseia & seitseman & mobydick\\
+ & (55 788 B) & (70 785 B) & (96 683 B) & (228 538 B) & (433 095 B)\\
+\hline
+Huffman & 1,163 & 1,449 & 1,962 & 4,584 & 9,029\\
+MTF & 0,358 & 0,389 & 0,605 & 1,365 & 2,376\\
+BWT & 0,065  & 0,066 & 0,088 & 0,236 & 0,491\\
+Yhteensä &  1.617612 & 1.942284 & 2.688281 & 6.214634 & 11.925905
+\end{tabular}
+\end{center}
+
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=120mm]{decompression.png}
+\caption{Purkuaika. BWT vihreällä, MTF sinisellä, Huffman punaisella ja kokonaisaika mustalla. Pakatun tiedoston koko vaaka-akselilla.}
+\label{purkukuva}
+\end{figure}
+
+Kuten kuvasta \ref{purkukuva} nähdään, Huffman-koodaus ja MTF vaikuttavat noudattavan lineaarista aikavaativuutta. BWT:tä täytyy tarkastella erikseen, sillä sen käyttämä aika on tässä niin pieni, että vaikutus hukkuu. Kuvaajasta \ref{bwtpurkukuva} voidaan nähdä aavistus $\mathcal{O}(n\log n)$-operaation suoritusajan loivasti kiihtyvästä kasvusta.
+
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=120mm]{bwtdecompress.png}
+\caption{Burrows-Wheeler -muunnoksen purkuaika}
+\label{bwtpurkukuva}
+\end{figure}
+
+\newpage
 
 \begin{thebibliography}
 
-\bibitem{bwtwikipedia} http://en.wikipedia.org/wiki/Burrows-Wheeler\_transform
+\bibitem{bwtwikipedia} 
+http://en.wikipedia.org/wiki/Burrows-Wheeler\_transform
+
+\bibitem{bwt_easy}
+Spencer Carroll
+"An Easy to Understand Explanation of the Burrows Wheeler Transform"
+http://spencer-carroll.com/an-easy-to-understand-explanation-of-the-burrows-wheeler-transform/
 
 \bibitem{spamateriaali}
+Juha Kärkkäinen\\
+String Processing Algorithms, Kurssimateriaali (syksy 2014).\\
+http://www.cs.helsinki.fi/u/tpkarkka/teach/14-15/SPA/lecture02.pdf
+
+\bibitem{alicegutenberg}
+Project Gutenberg's Alice's Adventures in Wonderland, by Lewis Carroll\\
+http://www.gutenberg.org/cache/epub/11/pg11.txt
+
+\bibitem{ecoli}
+University of Wisconsin-Madison\\
+Escherichia coli K-12 MG1655 complete genome\\
+http://www.genome.wisc.edu/pub/sequence/U00096.2.fas
+
+\bibitem{bzip2}
+http://en.wikipedia.org/wiki/Bzip2
+
+\bibitem{gzip}
+http://fi.wikipedia.org/wiki/Gzip
+
+\bibitem{mtfwiki}
+http://en.wikipedia.org/wiki/Move-to-front\_transform
+
+\bibitem{turing}
+http://en.wikipedia.org/wiki/Alan\_Turing
+
+\bibitem{seitseman}
+The Project Gutenberg EBook of Seitsemän veljestä, by Aleksis Kivi\\
+http://www.gutenberg.org/cache/epub/11940/pg11940.txt
+
+\bibitem{odysseia}
+The Project Gutenberg EBook of Odysseus, the Hero of Ithaca, by Homer\\
+http://www.gutenberg.org/files/24856/24856-0.txt
+
+\bibitem{bible}
+The Project Gutenberg EBook of The King James Bible\\
+http://www.gutenberg.org/cache/epub/10/pg10.txt
+
+\bibitem{mobydick}
+The Project Gutenberg EBook of Moby Dick; or The Whale, by Herman Melville\\
+http://www.gutenberg.org/cache/epub/2701/pg2701.txt
+
+\bibitem{hamlet}
+Project Gutenberg Etext of Hamlet by Shakespeare\\
+http://www.gutenberg.org/cache/epub/1524/pg1524.txt
+
+
 \end{thebibliography}
 
 \end{document}
