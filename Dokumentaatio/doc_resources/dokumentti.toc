@@ -5,15 +5,15 @@
 \contentsline {subsection}{\numberline {2.2}Pakkaus}{2}
 \contentsline {subsubsection}{\numberline {2.2.1}Burrows-Wheeler -muunnos (BWT)}{2}
 \contentsline {subsubsection}{\numberline {2.2.2}Move to front -muunnos (MTF)}{4}
-\contentsline {subsubsection}{\numberline {2.2.3}Huffman-koodaus}{4}
+\contentsline {subsubsection}{\numberline {2.2.3}Huffman-koodaus}{5}
 \contentsline {subsection}{\numberline {2.3}Purku}{6}
-\contentsline {subsubsection}{\numberline {2.3.1}Huffman-koodaus}{6}
+\contentsline {subsubsection}{\numberline {2.3.1}Huffman-koodaus}{7}
 \contentsline {subsubsection}{\numberline {2.3.2}Move to front -muunnos}{7}
-\contentsline {subsubsection}{\numberline {2.3.3}Burrows\penalty \@M \hskip \z@skip \discretionary {-}{}{}\penalty \@M \hskip \z@skip --Wheeler -muunnos}{7}
+\contentsline {subsubsection}{\numberline {2.3.3}Burrows\penalty \@M \hskip \z@skip \discretionary {-}{}{}\penalty \@M \hskip \z@skip --Wheeler -muunnos}{8}
 \contentsline {subsection}{\numberline {2.4}Jatkokehitysideoita}{9}
 \contentsline {section}{\numberline {3}K\"aytt\"oohje}{9}
 \contentsline {section}{\numberline {4}Testausdokumentti}{10}
 \contentsline {subsection}{\numberline {4.1}JUnit-testaus}{10}
 \contentsline {subsection}{\numberline {4.2}Empiirinen pakkaustehokkuuden testaus}{11}
 \contentsline {subsection}{\numberline {4.3}Empiirinen suorituskyvyn testaus}{12}
-\contentsline {section}{L\"ahteet}{15}
+\contentsline {section}{L\"ahteet}{16}

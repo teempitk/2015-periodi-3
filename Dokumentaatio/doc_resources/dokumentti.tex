@@ -59,11 +59,18 @@ Jokainen kompressiopinon elementti on jo itsessään oma algoritminsa, mutta niide
 \item insertion sort (Huffman-puun rakennuksessa, käytettäessä {\tt MyLinkedList}iä järjestettynä {\tt insertPreservingOrder}-metodilla)
 \end{itemize}
 
-Pakkausohjelmille on tärkeää toimia tehokkaasti niin tila- kuin aikavaativuuksien suhteen, koska syötteet ovat usein hyvin suuria. Käytetyt menetelmät toimivat pääosin lineaarisessa ajassa, mistä poikkeuksena Burrows-Wheeler -muunnos, joka vaatii keskimäärin $\mathcal{O}(n \log n)$-ajassa toimivia järjestämisalgoritmeja. Tarkemmin aikavaativuuksia on eriteltu toteutusdokumentissa.
+Pakkausohjelmille on tärkeää toimia tehokkaasti niin tila- kuin aikavaativuuksien suhteen, koska syötteet ovat usein hyvin suuria. Käytetyt menetelmät toimivat pääosin lineaarisessa ajassa, mistä poikkeuksena Burrows-Wheeler -muunnos, joka vaatii keskimäärin $\mathcal{O}(n \log n)$-ajassa toimivia järjestämisalgoritmeja, ja jonka vuoksi pakkaus- ja purkuoperaatioiden kokonaisuudet toimivat siis ajassa $\mathcal{O}(n \log n)$.  Tarkemmin aikavaativuuksia on eriteltu toteutusdokumentissa.
 
 \section{Toteutusdokumentti}
 \subsection{Ohjelman rakenne}
 Ohjelman rakenne on todella yksinkertainen, ja isojen linjojen toimintalogiikka on pitkälti Main-luokassa, joka tulkitsee annettujen parametrien kelpoisuuden, ja kutsuu pakkausoperaatioita tekeviä metodeja. Jokainen kolmesta pakkaus- ja muunnosoperaatioluokasta tarjoaa operaationsa staattisena metodina, joita Main-luokka kutsuu. Seuraavissa osioissa kuvataan yksityiskohtaisemmin eri menetelmien sisäistä toteutusta.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=120mm]{luokkakaavio.png}
+\caption{Ohjelman rakenne}
+\label{bwtpurkukuva}
+\end{figure}
 
 \subsection{Pakkaus}
 \subsubsection{Burrows-Wheeler -muunnos (BWT)}
@@ -95,7 +102,7 @@ n & a & n & a & b & a
 
 Muunnettu data on tämän matriisin viimeinen sarake, ja datan oikeassa järjestyksessä sisältävän rivin numero, tässä siis "nnbaaa", 3. Tässä projektissa muunnos toteutettiin Wikipedian \cite{bwtwikipedia} artikkelin mukaisesti. Käytännön toteutuksissa datan koon suhteen neliöllistä matriisia ei tietenkään toteuteta kokonaan, vaan kunkin matriisin rivin voi esittää sanan ensimmäisen tavun indeksinä alkuperäisessä datassa.
 
-Datan luku tiedostosta ja matriisia kuvaavien osoittimien alustus ovat luonnollisesti luokkaa $\mathcal{O}(n)$ niin aika- kuin tilavaativuudeltaan. Matriisin rivien järjestys tapahtuu \cite{spamateriaali} kuvatulla \textit{string quicksort}illa. Pitkien merkkijonojen (tai tässä tavutaulukoiden) normaali pikajärjestäminen ei toimi $\mathcal{O}(n\log n)$-ajassa, sillä kahden merkkijonojen vertaaminen ei aina onnistu yhdellä operaatiolla, vaan voi vaatia jopa merkkijonon pituuden verran vertailuja. Merkkijonoille muokattu quicksort pitää rekursiossa mukana myös vertailun kohteena olevien merkkijonojen \textit{pisimmän yhtenevän alkuosan} (longest common prefix, lcp) pituuden, jolloin vertailu osataan aloittaa merkkijonon järkevästä indeksistä. Tällöin quicksortin aikavaativuus saadaan merkkijonoille toteutumaan ajassa $\mathcal{O}(n\log n)+\Sigma LCP$. Tässä $\Sigma LCP$ tarkoittaa summaa järjestetyn matriisin kunkin rivin yhteisestä etuliitteestä ylläolevaan riviin, siis \textit{banana}-esimerkissä 0 + 1 + 3 + 0  + 0 + 2 = 6. Satunnaisissa ja käytännön tapauksissa aakkosto (erilaisten esiintyvien tavujen määrä) on yleisesti suuri, jolloin yhteiset alkuosat ovat suhteellisen lyhyitä, ja aikavaativuus on käytännössä $\mathcal{O}(n \log n)$. Toteutettu algoritmi vaatii kussakin rekursion tasossa lineaarisen määrän tilaa, ja rekursion keskimääräinen syvyys on $\mathcal{O}(n)$, joten myös tilavaativuus on tässä $\mathcal{O}(n \log n)$, jota voisi luonnollisesti optimoida vielä paremmaksi.
+Datan luku tiedostosta ja matriisia kuvaavien osoittimien alustus ovat luonnollisesti luokkaa $\mathcal{O}(n)$ niin aika- kuin tilavaativuudeltaan. Matriisin rivien järjestys tapahtuu \cite{spamateriaali} kuvatulla \textit{string quicksort}illa. Pitkien merkkijonojen (tai tässä tavutaulukoiden) normaali pikajärjestäminen ei toimi $\mathcal{O}(n\log n)$-ajassa, sillä kahden merkkijonojen vertaaminen ei aina onnistu yhdellä operaatiolla, vaan voi vaatia jopa merkkijonon pituuden verran vertailuja. Merkkijonoille muokattu quicksort pitää rekursiossa mukana myös vertailun kohteena olevien merkkijonojen \textit{pisimmän yhtenevän alkuosan} (longest common prefix, lcp) pituuden, jolloin vertailu osataan aloittaa merkkijonon järkevästä indeksistä. Tällöin quicksortin aikavaativuus saadaan merkkijonoille toteutumaan ajassa $\mathcal{O}(n\log n)+\Sigma LCP$. Tässä $\Sigma LCP$ tarkoittaa summaa järjestetyn matriisin kunkin rivin yhteisestä etuliitteestä ylläolevaan riviin, siis \textit{banana}-esimerkissä 0 + 1 + 3 + 0  + 0 + 2 = 6. Satunnaisissa ja käytännön tapauksissa aakkosto (erilaisten esiintyvien tavujen määrä) on yleisesti suuri, jolloin yhteiset alkuosat ovat suhteellisen lyhyitä, ja aikavaativuus on käytännössä $\mathcal{O}(n \log n)$. Toteutettu algoritmi vaatii kussakin rekursion tasossa lineaarisen määrän tilaa, ja rekursion keskimääräinen syvyys on $\mathcal{O}(\log n)$, joten myös tilavaativuus on tässä $\mathcal{O}(n \log n)$.
 
 Muunnetun datan lukeminen järjestetystä matriisista on nyt $\mathcal{O}(n)$-operaatio, ja samoin datan kirjoitus tiedostoon. Toteutetun Burrows\---Wheeler -muunnoksen peräkkäisistä operaatioista raskain on siis matriisin rivien pikajärjestäminen, joka vie aikaa ja tilaa keskimäärin $\mathcal{O}(n \log n)$. Muunnetun tiedoston alkuun lisätään nyt vielä alkuperäisen datan viimeisen tavun osoitin. Tämä tallennetaan 32-bittisenä etumerkillisenä kokonaislukuna (int), joten suurimmat tiedostot, joille pakkaus voidaan tehdä ovat kooltaan $2^{31}-1 \approx$2 gigatavua.
 
@@ -220,7 +227,7 @@ Algoritmin while-silmukka suoritetaan selvästi $\mathcal{O}(n)$ kertaa. Silmukan
 
 
 \subsubsection{Move to front -muunnos}
-Move to front on menetelmistä samankaltaisin pakkaus- ja purkuvaiheessa. Myös purkuvaiheessa kaikki tavut alustetaan ensin listaan, mutta nyt toimitaan pakkausvaiheeseen nähden käänteisesti \--- luetaan ensin "oikean" tavun indeksi pakatusta tiedostosta, luetaan tavu listasta indeksin mukaisesti, ja siirretään sitten tavu taas listan alkuun ja lisätään se puretun datan loppuun. Kuten pakkauksessa, alustustoimenpiteet vaativat $\mathcal{O}(m)=\mathcal{O}(256)\mathcal{O}(1)$ ajan ja tilan. Dataa käsitellessä läpikäydään linkitettyä m-alkioista tavulistaa n-kertaa, ja kokonaisaikavaativuus on, kuten pakkauksessa, $\mathcal{O}(mn)=\mathcal{O}(n)$.
+Move to front on menetelmistä samankaltaisin pakkaus- ja purkuvaiheessa. Myös purkuvaiheessa kaikki tavut alustetaan ensin listaan, mutta nyt toimitaan pakkausvaiheeseen nähden käänteisesti \--- luetaan ensin "oikean" tavun indeksi pakatusta tiedostosta, luetaan tavu listasta indeksin mukaisesti, ja siirretään sitten tavu taas listan alkuun ja lisätään se puretun datan loppuun. Kuten pakkauksessa, alustustoimenpiteet vaativat $\mathcal{O}(m)=\mathcal{O}(256)=\mathcal{O}(1)$ ajan ja tilan. Dataa käsitellessä läpikäydään linkitettyä m-alkioista tavulistaa n-kertaa, ja kokonaisaikavaativuus on, kuten pakkauksessa, $\mathcal{O}(mn)=\mathcal{O}(n)$.
 
 \subsubsection{Burrows\---Wheeler -muunnos}
 Burrows-Wheeler -muunnoksen purku on toteutettu kuten \cite{bwt_easy}:ssa Muistetaan, että pakattu data vastasi BWT-matriisin viimeistä saraketta. Koska matriisin jokainen sarake sisältää datan kaikki symbolit, ja matriisin rivit olivat aakkosjärjestyksessä, saamme ensimmäisen sarakkeen yksinkertaisesti järjestämällä muunnetun datan tavut. Viimeisen sarakkeen lukeminen on tietenkin lineaarinen operaatio, ja ensimmäinen sarake saadaan pikajärjestämällä ajassa $\mathcal{O}(n \log n)$. Aiemmin käytetyssä \textit{banana}-esimerkissä tiedämme nyt siis:
@@ -284,7 +291,7 @@ ja purkukomento esimerkiksi
 
 Jos tulostusoptio on annettu, ohjelma tulostaa tietoa etenemisestään, edellä mainittu pakkauksen esimerkkikomento voi tulostaa esimerkiksi:
 \begin{verbatim}
-> java -jar tiralabra.jar c ../sampleFiles/alice.txt 
+> java -jar tiralabra.jar -c -p ../sampleFiles/alice.txt 
 Compression started.
 Phase 1/3: Burrows-Wheeler transform started ...		   Finished. Time: 0,369 sec.
 Phase 2/3: Move to front transformation started ...		Finished. Time: 0,286 sec.
@@ -339,11 +346,11 @@ Huffman & $\mathcal{O}(n)$ & $\mathcal{O}(n)$
 
 Ensinnäkin on todettava, että tämän pakkausohjelman tapauksessa pakkausaikaan vaikuttaa vahvasti myös muut tekijät pelkän tiedoston koon lisäksi. BWT hyötyy nopeudessa mahdollisimman satunnaisesta datasta, sillä BWT-matriisin rivien vertailu järjestämisessä ratkeaa todennäköisesti sitä aiemmin, mitä satunnaisempi data. Toisaalta esimerkiksi MTF hyötyy tasan päinvastaisesta tapauksesta, ja toimii nopeimmin jos koko data on samaa tavua (tavu asetetaan ensimmäisen tavun käsittelyn jälkeen tavulistan alkuun, eikä sitä tarvitse enää sen jälkeen etsiä listasta). On myös huomattava, että ajallisen suorituskyvyn etu ei välttämättä ole pakkaustehokkuuden etu, kuten edellä mainitussa BWT-esimerkissä (satunnaisessa datassa ei ole pakkauksessa hyödynnettävää säännöllisyyttä, ja pakkaustehokkuus on huono).
 
-Kun pakkausohjelmalle annetaan ajettaessa parametri {\tt -p}, ohjelma tulostaa tietoa suorituksen etenemisestä ja kuhunkin vaiheeseen kuluneesta ajasta. Pakataan nyt aluksi seuraavat tiedostot:
+Kun pakkausohjelmalle annetaan ajettaessa parametri {\tt -p}, ohjelma tulostaa tietoa suorituksen etenemisestä ja kuhunkin vaiheeseen kuluneesta ajasta. Pakataan nyt seuraavat tiedostot:
 \begin{itemize}
 \item {\tt alice.txt}
 \item {\tt hamlet.txt} William Shakespeare: Hamlet \cite{hamlet}
-\item {\tt odysseia.txt} Homeros: Odysseia \cite{odysseia}
+\item {\tt odysseia.txt} Homeros: Odysseus, the Hero of Ithaca \cite{odysseia}
 \item {\tt seitseman.txt} Aleksis Kivi: Seitsemän veljestä \cite{seitseman}
 \item {\tt mobydick.txt} Herman Melville: Moby Dick \cite{mobydick}
 \end{itemize}
@@ -365,11 +372,11 @@ Yhteensä & 0,787231 &1.02652& 1.107054 & 2.484259 & 4.770644
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=120mm]{compression.png}
-\caption{Pakkausaika. Violetti = Huffman-koodaus, sininen = BWT, punainen = MTF. Pakkauksen kokonaisaika mustalla, edellämainittujen tiedostojen koot vaaka-akselilla.}
+\caption{Pakkausaika tiedoston koon funktiona. Huffman punaisella, BWT vihreällä, MTF sinisellä ja kokonaisaika mustalla.}
 \label{pakkauskuva}
 \end{figure}
 
-Kuten kuvaajasta \ref{pakkauskuva} havaitaan, MTF:n ja Huffman-koodauksen lineaarinen aikavaativuus toteutuu testissä kuten pitääkin. Burrows-Wheeler näkyy toimivan tässä testissä jopa "paremmin kuin pitäisi", ja näyttää jopa lineaariselta. Kuitenkin, kuten edellä mainittiin, pakkauksen nopeuteen vaikuttavat monet muutkin tekijät. Lisäksi ohjelma tulostaa koko suoritusajan, jolloin esimerkiksi laitteiston muu kuormitus vaikuttaa tuloksiin. 
+Kuten kuvaajasta \ref{pakkauskuva} havaitaan, teoriassa todetut aikavaativuudet vaikuttavat pätevän tämän testin nojalla myös käytännössä. Näin pienellä otoksella on tietenkin mahdotonta sanoa mitään varmaksi, ja esim. luokkien $\mathcal{O}(n\log n)$ ja $\mathcal{O}(n)$ eroa on lähes mahdotonta havaita.
 
 Vastaavasti purkua testattaessa saatiin seuraavat tulokset:
 
@@ -393,14 +400,20 @@ Yhteensä &  1.617612 & 1.942284 & 2.688281 & 6.214634 & 11.925905
 \label{purkukuva}
 \end{figure}
 
-Kuten kuvasta \ref{purkukuva} nähdään, Huffman-koodaus ja MTF vaikuttavat noudattavan lineaarista aikavaativuutta. BWT:tä täytyy tarkastella erikseen, sillä sen käyttämä aika on tässä niin pieni, että vaikutus hukkuu. Kuvaajasta \ref{bwtpurkukuva} voidaan nähdä aavistus $\mathcal{O}(n\log n)$-operaation suoritusajan loivasti kiihtyvästä kasvusta.
-
-
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=120mm]{bwtdecompress.png}
 \caption{Burrows-Wheeler -muunnoksen purkuaika}
 \label{bwtpurkukuva}
+\end{figure}
+
+Kuten kuvasta \ref{purkukuva} nähdään, Huffman-koodaus ja MTF vaikuttavat noudattavan lineaarista aikavaativuutta. BWT:tä täytyy tarkastella erikseen, sillä sen käyttämä aika on tässä niin pieni, että vaikutus hukkuu. Kuvaajasta \ref{bwtpurkukuva} voidaan nähdä aavistus $\mathcal{O}(n\log n)$-operaation suoritusajan loivasti kiihtyvästä kasvusta. Aikavaativuuden saa paremmin esiin, kun ottaa mukaan vielä laajemman skaalan eri tiedostokokoja. Kuvaajassa \ref{purkuraamatunkanssa} dataan on vielä lisätty raamatun \cite{bible} purku (koko pakattuna 1 213 787 tavua, kesto 42,938 sekuntia). Dataan on sovitettu nyt käyrät muotoa $f(n)=an+b$ (lineaarinen) ja $f(n)=an\log_2 (n) + bn + c$ ($\in \mathcal{O}(n\log n)$). Kuten havaitaan, jälkimmäinen sopii dataan huomattavasti paremmin.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=120mm]{purkutraamatunkanssa.png}
+\caption{Funktioiden sovittamista purkamisen kokonaissuoritusaikadataan, johon on lisätty vielä huomattavasti suurempi testitiedosto. Lineaarinen funktio vihreällä, $\mathcal{O}(n\log n)$-funktio sinisellä.}
+\label{purkuraamatunkanssa}
 \end{figure}
 
 \newpage
@@ -420,15 +433,6 @@ Juha Kärkkäinen\\
 String Processing Algorithms, Kurssimateriaali (syksy 2014).\\
 http://www.cs.helsinki.fi/u/tpkarkka/teach/14-15/SPA/lecture02.pdf
 
-\bibitem{alicegutenberg}
-Project Gutenberg's Alice's Adventures in Wonderland, by Lewis Carroll\\
-http://www.gutenberg.org/cache/epub/11/pg11.txt
-
-\bibitem{ecoli}
-University of Wisconsin-Madison\\
-Escherichia coli K-12 MG1655 complete genome\\
-http://www.genome.wisc.edu/pub/sequence/U00096.2.fas
-
 \bibitem{bzip2}
 http://en.wikipedia.org/wiki/Bzip2
 
@@ -438,8 +442,20 @@ http://fi.wikipedia.org/wiki/Gzip
 \bibitem{mtfwiki}
 http://en.wikipedia.org/wiki/Move-to-front\_transform
 
+\vspace{30pt}
+\noindent \textbf{Testitiedostot}
+
 \bibitem{turing}
 http://en.wikipedia.org/wiki/Alan\_Turing
+
+\bibitem{alicegutenberg}
+Project Gutenberg's Alice's Adventures in Wonderland, by Lewis Carroll\\
+http://www.gutenberg.org/cache/epub/11/pg11.txt
+
+\bibitem{ecoli}
+University of Wisconsin-Madison\\
+Escherichia coli K-12 MG1655 complete genome\\
+http://www.genome.wisc.edu/pub/sequence/U00096.2.fas
 
 \bibitem{seitseman}
 The Project Gutenberg EBook of Seitsemän veljestä, by Aleksis Kivi\\
